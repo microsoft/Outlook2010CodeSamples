@@ -1,0 +1,126 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif // _WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_CONFIGPAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 188
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 69
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CONFIGPAGE DIALOG  0, 0, 195, 76
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "General"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "User Display Name:",IDC_LBL_DISPLAY_NAME,7,7,63,8
+    EDITTEXT        IDC_EDIT_DISPLAY_NAME,7,21,181,14,ES_AUTOHSCROLL
+    LTEXT           "Path To Inbox (UNC Share)",IDC_LBL_INBOX,7,41,88,8
+    EDITTEXT        IDC_EDIT_INBOX,7,55,181,14,ES_AUTOHSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_CONFIGSHEET_TITLE   "MRXP Transport Provider Configuration"
+    IDS_INVALID_CONFIG_ERROR "One or more specified values are invalid. "
+    IDS_ERROR_CAPTION       "MRXP Sample Transport Provider"
+    IDS_PROVIDER_DISPLAY    "MRXP Sample Transport Provider"
+    IDS_STATUS_OFFLINE      "Offline"
+    IDS_STATUS_AVAILABLE    "Available"
+    IDS_STATUS_ONLINE       "Online"
+    IDS_STATUS_UPLOADING    "Uploading messages..."
+    IDS_STATUS_DOWNLOADING  "Downloading messages..."
+    IDS_STATUS_INFLUSHING   "Inbound flushing..."
+    IDS_STATUS_OUTFLUSHING  "Outbound flushing..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_NDR_DEFAULT_TEXT    "Sending to this recipient failed for an unknown reason.  HRESULT = "
+    IDS_NDR_BAD_NETPATH     "The recipient's mailbox was unreachable.  The network path was not found."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

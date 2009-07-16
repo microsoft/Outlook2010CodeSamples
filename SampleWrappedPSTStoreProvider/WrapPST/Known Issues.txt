@@ -1,0 +1,1 @@
+For known issues about the Sample Wrapped PST Store Provider, see http://go.microsoft.com/fwlink/?LinkId=103242.

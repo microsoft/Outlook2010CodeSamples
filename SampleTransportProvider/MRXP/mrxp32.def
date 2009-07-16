@@ -1,0 +1,11 @@
+LIBRARY     MRXP32
+
+EXPORTS
+	DllMain				 @1
+    XPProviderInit       @2
+    ServiceEntry		 @3
+;    WizardEntry			@4
+	PreprocessMessage	 @5
+	RemovePreprocessInfo @6
+	MergeWithMAPISVC	 @7
+	RemoveFromMAPISVC	 @8

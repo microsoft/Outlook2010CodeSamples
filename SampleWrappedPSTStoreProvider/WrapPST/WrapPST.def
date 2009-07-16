@@ -1,0 +1,9 @@
+LIBRARY         WrpPST32.dll
+
+EXPORTS
+    TestDoSync          @1
+    MSProviderInit      @2
+    ServiceEntry        @4
+
+    MergeWithMAPISVC	@5
+    RemoveFromMAPISVC	@6

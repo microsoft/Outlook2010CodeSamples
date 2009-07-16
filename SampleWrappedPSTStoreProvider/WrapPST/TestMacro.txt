@@ -1,0 +1,6 @@
+Private Declare PtrSafe Sub TestDoSync Lib "wrppst32.dll" ()
+'Private Declare Sub TestDoSync Lib "wrppst32.dll" ()
+
+Private Sub MyTestDoSync()
+    TestDoSync
+End Sub
