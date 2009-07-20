@@ -431,7 +431,7 @@ BOOL CTxtABDatabase::FPushRecord(list<TSTRING> &lstStrProps, RECLIST &recList)
         PCRecord        pRec = NULL;
         LPSPropValue    pProps = NULL;
         RECORD_ID_TYPE  recID = 0;
-        size_t          size = 0;
+        ULONG           size = 0;
 
         pRec = new CRecord();
         if (!pRec)
@@ -442,7 +442,7 @@ BOOL CTxtABDatabase::FPushRecord(list<TSTRING> &lstStrProps, RECLIST &recList)
         recID = NewRecID();
         pRec->SetRecID(recID++);
 
-        size = lstStrProps.size();
+        size = (ULONG) lstStrProps.size();
         // Allocate pProps.
         pProps = (LPSPropValue)malloc(size * sizeof SPropValue);
         if (!pProps)

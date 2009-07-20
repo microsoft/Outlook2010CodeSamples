@@ -12,15 +12,12 @@
 //    CMAPITable()
 //
 //    Parameters
-
 //          pTbl        [in] pointer to table to wrap
 //          ulParent    [in] ID of object that owns this table
 //    Purpose
 //          Class constructor. This class wraps an IMAPITable
-
 //          to intercept Restrict on PR_ANR
 //
-
 //    Return Value
 //          none.
 //
@@ -37,14 +34,11 @@ CMAPITable::CMAPITable(LPMAPITABLE pTbl, ULONG ulParent)
 //    ~CMAPITable()
 //
 //    Parameters
-
 //          none.
 //
 //    Purpose
 //          Class destructor.
-
 //
-
 //    Return Value
 //          none.
 //
@@ -59,14 +53,12 @@ CMAPITable::~CMAPITable()
 //
 //    GetLastError()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
 STDMETHODIMP CMAPITable::GetLastError(HRESULT             hResult,
                                       ULONG               ulFlags,
                                       LPMAPIERROR FAR    *lppMAPIError)
-
 {
         return m_pTbl->GetLastError(hResult,
                                     ulFlags,
@@ -78,20 +70,15 @@ STDMETHODIMP CMAPITable::GetLastError(HRESULT             hResult,
 //
 //    Advise()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::Advise(ULONG             ulEventMask,
                                 LPMAPIADVISESINK  lpAdviseSink,
-                                ULONG FAR        *lpulConnection)
-
+                                ULONG_PTR FAR     *lpulConnection)
 {
         return m_pTbl->Advise(ulEventMask,
-
                               lpAdviseSink,
-
                               lpulConnection);
 }
 
@@ -99,13 +86,10 @@ STDMETHODIMP CMAPITable::Advise(ULONG             ulEventMask,
 //
 //    Unadvise()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
-STDMETHODIMP CMAPITable::Unadvise(ULONG ulConnection)
-
+STDMETHODIMP CMAPITable::Unadvise(ULONG_PTR ulConnection)
 {
         return m_pTbl->Unadvise(ulConnection);
 }
@@ -114,17 +98,14 @@ STDMETHODIMP CMAPITable::Unadvise(ULONG ulConnection)
 //
 //    GetStatus()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::GetStatus(ULONG FAR    *lpulTableStatus,
                                    ULONG FAR    *lpulTableType)
 {
         return m_pTbl->GetStatus(lpulTableStatus,
                                  lpulTableType);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -133,34 +114,25 @@ STDMETHODIMP CMAPITable::GetStatus(ULONG FAR    *lpulTableStatus,
 //
 //	Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::SetColumns(LPSPropTagArray lpPropTagArray,
-
                                     ULONG           ulFlags)
-
 {
         return m_pTbl->SetColumns(lpPropTagArray,
-
                                   ulFlags);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    QueryColumns()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::QueryColumns(ULONG                ulFlags,
                                       LPSPropTagArray FAR *lpPropTagArray)
-
 {
         return m_pTbl->QueryColumns(ulFlags,
                                     lpPropTagArray);
@@ -172,19 +144,14 @@ STDMETHODIMP CMAPITable::QueryColumns(ULONG                ulFlags,
 //
 //	Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::GetRowCount(ULONG      ulFlags,
                                      ULONG FAR *lpulCount)
-
 {
         return m_pTbl->GetRowCount(ulFlags,
                                    lpulCount);
-
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -193,34 +160,27 @@ STDMETHODIMP CMAPITable::GetRowCount(ULONG      ulFlags,
 //
 //	Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::SeekRow(BOOKMARK   bkOrigin,
                                  LONG       lRowCount,
                                  LONG FAR  *lplRowsSought)
-
 {
         return m_pTbl->SeekRow(bkOrigin,
                                lRowCount,
                                lplRowsSought);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    SeekRowApprox()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::SeekRowApprox(ULONG  ulNumerator,
                                        ULONG  ulDenominator)
-
 {
         return m_pTbl->SeekRowApprox(ulNumerator,
                                      ulDenominator);
@@ -232,15 +192,12 @@ STDMETHODIMP CMAPITable::SeekRowApprox(ULONG  ulNumerator,
 //
 //	Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::QueryPosition(ULONG FAR *lpulRow,
                                        ULONG FAR *lpulNumerator,
                                        ULONG FAR *lpulDenominator)
-
 {
         return m_pTbl->QueryPosition(lpulRow,
                                      lpulNumerator,
@@ -251,15 +208,12 @@ STDMETHODIMP CMAPITable::QueryPosition(ULONG FAR *lpulRow,
 //
 //    FindRow()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::FindRow(LPSRestriction  lpRestriction,
                                  BOOKMARK        bkOrigin,
                                  ULONG           ulFlags)
-
 {
         return m_pTbl->FindRow(lpRestriction,
                                bkOrigin,
@@ -271,9 +225,7 @@ STDMETHODIMP CMAPITable::FindRow(LPSRestriction  lpRestriction,
 //    GetNextToken()
 //
 //    Parameters
-
 //          pszInput    [in-out] input: buffer to tokenize,
-
 //                               output:buffer with tokenized prefix
 //                               removed suitable to pass to GetNextToken
 //
@@ -281,7 +233,6 @@ STDMETHODIMP CMAPITable::FindRow(LPSRestriction  lpRestriction,
 //          Destructively obtains the next non-white space substring
 //          in the input buffer. Equivalent to strtok().
 //
-
 //    Return Value
 //          The next substring if found, NULL if at end of string
 //
@@ -317,7 +268,6 @@ LPTSTR GetNextToken(LPTSTR *pszInput)
         return CharUpper(szTmp);
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    Restrict()
@@ -326,7 +276,6 @@ LPTSTR GetNextToken(LPTSTR *pszInput)
 //
 //    Purpose
 //          This gets called if MAPI_E_AMBIGUOUS is returned for entries in
-
 //          ResolveName, and for the finder. The same initial search
 //          algorithm is used as for ResolveName: the first token is found in the target
 //          and a content restriction is done for all substrings. This yields many
@@ -335,15 +284,12 @@ LPTSTR GetNextToken(LPTSTR *pszInput)
 //          immediately after ResolveNames if a name is marked as ambiguous, but if
 //          a single row is returned here as the ambiguous match, it treats it as if
 //          it were resolved.
-
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
 STDMETHODIMP CMAPITable::Restrict(LPSRestriction  lpRestriction,
                                   ULONG           ulFlags)
-
 {
         HRESULT         hRes = S_OK;
         LPSRestriction  pRes = lpRestriction;
@@ -386,13 +332,10 @@ STDMETHODIMP CMAPITable::Restrict(LPSRestriction  lpRestriction,
 //
 //    CreateBookmark()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::CreateBookmark(BOOKMARK FAR *lpbkPosition)
-
 {
         return m_pTbl->CreateBookmark(lpbkPosition);
 }
@@ -401,13 +344,11 @@ STDMETHODIMP CMAPITable::CreateBookmark(BOOKMARK FAR *lpbkPosition)
 //
 //    FreeBookmark()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
 
 STDMETHODIMP CMAPITable::FreeBookmark(BOOKMARK  bkPosition)
-
 {
         return m_pTbl->FreeBookmark(bkPosition);
 }
@@ -418,14 +359,11 @@ STDMETHODIMP CMAPITable::FreeBookmark(BOOKMARK  bkPosition)
 //
 //	Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::SortTable(LPSSortOrderSet  lpSortCriteria,
                                    ULONG            ulFlags)
-
 {
         return m_pTbl->SortTable(lpSortCriteria, ulFlags);
 }
@@ -434,16 +372,12 @@ STDMETHODIMP CMAPITable::SortTable(LPSSortOrderSet  lpSortCriteria,
 //
 //    QuerySortOrder()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::QuerySortOrder(LPSSortOrderSet FAR *lppSortCriteria)
-
 {
     return m_pTbl->QuerySortOrder(lppSortCriteria);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -452,11 +386,9 @@ STDMETHODIMP CMAPITable::QuerySortOrder(LPSSortOrderSet FAR *lppSortCriteria)
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::QueryRows(LONG             lRowCount,
                                    ULONG            ulFlags,
                                    LPSRowSet FAR   *lppRows)
@@ -468,11 +400,9 @@ STDMETHODIMP CMAPITable::QueryRows(LONG             lRowCount,
 //
 //    Abort()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::Abort()
 {
         return m_pTbl->Abort();
@@ -482,18 +412,15 @@ STDMETHODIMP CMAPITable::Abort()
 //
 //    ExpandRow()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-
 STDMETHODIMP CMAPITable::ExpandRow(ULONG            cbInstanceKey,
                                    LPBYTE           pbInstanceKey,
                                    ULONG            ulRowCount,
                                    ULONG            ulFlags,
                                    LPSRowSet FAR   *lppRows,
                                    ULONG FAR       *lpulMoreRows)
-
 {
         return m_pTbl->ExpandRow(cbInstanceKey,
                                  pbInstanceKey,
@@ -501,14 +428,12 @@ STDMETHODIMP CMAPITable::ExpandRow(ULONG            cbInstanceKey,
                                  ulFlags,
                                  lppRows,
                                  lpulMoreRows);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    CollapseRow()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -517,20 +442,17 @@ STDMETHODIMP CMAPITable::CollapseRow(ULONG       cbInstanceKey,
                                      LPBYTE      pbInstanceKey,
                                      ULONG       ulFlags,
                                      ULONG FAR  *lpulRowCount)
-
 {
         return m_pTbl->CollapseRow(cbInstanceKey,
                                    pbInstanceKey,
                                    ulFlags,
                                    lpulRowCount);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    WaitForCompletion()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -541,14 +463,12 @@ STDMETHODIMP CMAPITable::WaitForCompletion(ULONG       ulFlags,
         return m_pTbl->WaitForCompletion(ulFlags,
                                          ulTimeout,
                                          lpulTableStatus);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    GetCollapseState()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -557,22 +477,18 @@ STDMETHODIMP CMAPITable::GetCollapseState(ULONG        ulFlags,
                                           LPBYTE       lpbInstanceKey,
                                           ULONG FAR   *lpcbCollapseState,
                                           LPBYTE FAR  *lppbCollapseState)
-
 {
         return m_pTbl->GetCollapseState(ulFlags,
                                         cbInstanceKey,
                                         lpbInstanceKey,
-
                                         lpcbCollapseState,
                                         lppbCollapseState);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    SetCollapseState()
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -580,7 +496,6 @@ STDMETHODIMP CMAPITable::SetCollapseState(ULONG          ulFlags,
                                           ULONG          cbCollapseState,
                                           LPBYTE         pbCollapseState,
                                           BOOKMARK FAR  *lpbkLocation)
-
 {
         return m_pTbl->SetCollapseState(ulFlags,
                                         cbCollapseState,
@@ -593,22 +508,18 @@ STDMETHODIMP CMAPITable::SetCollapseState(ULONG          ulFlags,
 //    QueryInterface()
 //
 //    Parameters
-
 //          See the OLE documentation for details.
 //
 //    Purpose
 //          Returns an interface if supported.
 //
-
 //
-
 //    Return Value
 //          NOERROR on success, E_NOINTERFACE if the interface can't be
 //          returned.
 //
 
 STDMETHODIMP CMAPITable::QueryInterface(REFIID   riid,
-
                                         LPVOID  *ppvObj)
 {
         if (IsBadWritePtr(ppvObj, sizeof LPUNKNOWN))
@@ -666,7 +577,6 @@ STDMETHODIMP_ (ULONG) CMAPITable::Release(void)
         {
                 // Destroy the object
                 delete this;
-
         }
 
         return ulRefCount;

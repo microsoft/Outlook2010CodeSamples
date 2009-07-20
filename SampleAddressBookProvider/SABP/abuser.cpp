@@ -412,15 +412,12 @@ STDMETHODIMP CMailUser::QueryInterface(REFIID   riid,
 //
 
 STDMETHODIMP CMailUser::GetLastError(HRESULT       hResult,
-
                                      ULONG         ulFlags,
                                      LPMAPIERROR  *lppMAPIError)
 {
         CheckParameters_IMAPIProp_GetLastError(this,
                                                hResult,
-
                                                ulFlags,
-
                                                ppMAPIError);
 
         return m_pPropData->GetLastError(hResult,
@@ -700,7 +697,7 @@ STDMETHODIMP  CMailUser::DeleteProps(LPSPropTagArray       lpPropTagArray,
 STDMETHODIMP  CMailUser::CopyTo(ULONG                 ciidExclude,
                                 LPCIID                rgiidExclude,
                                 LPSPropTagArray       lpExcludeProps,
-                                ULONG                 ulUIParam,
+                                ULONG_PTR             ulUIParam,
                                 LPMAPIPROGRESS        lpProgress,
                                 LPCIID                lpInterface,
                                 LPVOID                lpDestObj,
@@ -741,7 +738,7 @@ STDMETHODIMP  CMailUser::CopyTo(ULONG                 ciidExclude,
 
 
 STDMETHODIMP  CMailUser::CopyProps(LPSPropTagArray       lpIncludeProps,
-                                   ULONG                 ulUIParam,
+                                   ULONG_PTR             ulUIParam,
                                    LPMAPIPROGRESS        lpProgress,
                                    LPCIID                lpInterface,
                                    LPVOID                lpDestObj,

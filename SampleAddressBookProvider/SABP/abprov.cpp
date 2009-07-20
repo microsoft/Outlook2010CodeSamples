@@ -34,12 +34,10 @@ LPFREEBUFFER        vpfnFreeBuff;       // MAPIFreeBuffer function
 //    Purpose
 //          Called by the profile setup adminitration tool to display the provider
 //          configuration properties for this transport provider. Provides
-
 //          exception handler for configuration exceptions.
 //
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
-
 //
 HRESULT STDAPICALLTYPE ServiceEntry(HINSTANCE          /* hInst */,
                                     LPMALLOC           pMallocObj,
@@ -149,10 +147,8 @@ LCleanup:
 //          This function provides an exception handler for
 //          IABProvider object's constructor.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
-
 //
 STDINITMETHODIMP ABProviderInit(HINSTANCE         hInst,
                                 LPMALLOC          pMalloc,
@@ -222,13 +218,11 @@ LCleanup:
 //    CABProvider::CABProvider()
 //
 //    Parameters
-
 //          hInst   [in] module instance handle
 //
 //    Purpose
 //          Class constructor.
 //
-
 //    Return Value
 //          none.
 CABProvider::CABProvider(HINSTANCE hInst)
@@ -243,15 +237,12 @@ CABProvider::CABProvider(HINSTANCE hInst)
 //    ~CABProvider()
 //
 //    Parameters
-
 //          none.
 //
 //    Purpose
 //          Class destructor.
 //
-
 //
-
 //    Return Value
 
 CABProvider::~CABProvider()
@@ -265,15 +256,12 @@ CABProvider::~CABProvider()
 //    QueryInterface()
 //
 //    Parameters
-
 //          See the OLE documentation for details.
 //
 //    Purpose
 //          Returns an interface if supported.
 //
-
 //
-
 //    Return Value
 //          NOERROR on success, E_NOINTERFACE if the interface can't be returned.
 //
@@ -322,7 +310,6 @@ STDMETHODIMP_(ULONG) CABProvider::AddRef()
 //
 //    Purpose
 //          Decreases the usage count of this object. If the count is
-
 //          zero, object deletes itself.
 //
 //    Return Value
@@ -366,11 +353,8 @@ STDMETHODIMP CABProvider::Shutdown(ULONG * /* lpulFlags */)
 //    Purpose
 //          Display the logon dialog to show the options saved in the
 //          profile for this provider and allow changes to it. Save
-
 //          new configuration settings back in the profile. Try and
-
 //          open the DB file, or create it if not found. Create a
-
 //          new CABLogon object and return it to the caller. Try
 //          to get the logon UID from the profile (the UID is unique
 //          to the database file), create a new one if not found. Set
@@ -380,14 +364,12 @@ STDMETHODIMP CABProvider::Shutdown(ULONG * /* lpulFlags */)
 //    Return Value
 //      S_OK                        If no error
 //      MAPI_E_NO_ACCESS            If transport is logged with the
-
 //                                  LOGON_NO_DIALOG flag
 //      MAPI_E_NOT_ENOUGH_MEMORY    If could not allocate new CXPLogon object
 //      hResult                     With any other error code
 //
 STDMETHODIMP CABProvider::Logon(LPMAPISUP        lpMAPISup,
-
-                                ULONG            /* ulUIParam */,
+                                ULONG_PTR        /* ulUIParam */,
                                 LPTSTR           /* lpszProfileName */,
                                 ULONG            /* ulFlags */,
                                 ULONG          * /* lpulpcbSecurity */,

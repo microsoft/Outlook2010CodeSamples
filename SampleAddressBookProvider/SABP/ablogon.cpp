@@ -62,7 +62,6 @@ CABLogon::CABLogon(HINSTANCE    hInst,
 //    CABLogon::~CABLogon()
 //
 //    Parameters
-
 //          none.
 //
 //    Purpose
@@ -90,15 +89,12 @@ CABLogon::~CABLogon()
 //    QueryInterface()
 //
 //    Parameters
-
 //          See the OLE documentation for details.
 //
 //    Purpose
 //          Returns an interface if supported.
 //
-
 //
-
 //    Return Value
 //          NOERROR on success, E_NOINTERFACE if the interface
 //          can't be returned.
@@ -148,7 +144,6 @@ STDMETHODIMP_ (ULONG) CABLogon::AddRef (void)
 //
 //    Purpose
 //          Decreases the usage count of this object. If the
-
 //          count is down to zero, object deletes itself.
 //
 //    Return Value
@@ -175,7 +170,6 @@ STDMETHODIMP_ (ULONG) CABLogon::Release (void)
 //	Refer to the MSDN documentation for more information.
 //
 //    Parameters
-
 //          bAvail      [in] PR_STATUS_CODE
 //          ulFlags     [in] see IMAPISupport::ModifyStatusRow
 //
@@ -232,7 +226,6 @@ STDMETHODIMP CABLogon::HrSetStatusRow(BOOL bAvail, ULONG ulFlags)
 //    Purpose
 //          Gets detailed error information based on hResult.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -249,13 +242,12 @@ STDMETHODIMP CABLogon::GetLastError(HRESULT         /* hResult */,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 STDMETHODIMP CABLogon::Logoff(ULONG /* ulFlags */)
 {
         // Unsubscibe registered notifications.
-        for (list<ULONG>::iterator it = m_ullstAdviseCnx.begin();
+        for (list<ULONG_PTR>::iterator it = m_ullstAdviseCnx.begin();
                 it != m_ullstAdviseCnx.end();
                 it++)
         {
@@ -272,19 +264,14 @@ STDMETHODIMP CABLogon::Logoff(ULONG /* ulFlags */)
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
 STDMETHODIMP CABLogon::OpenEntry(ULONG          cbEntryID,
-
                                  LPENTRYID      lpEntryID,
-
                                  LPCIID         lpInterface,
-
                                  ULONG          /* ulFlags */,
                                  ULONG         *lpulObjType,
-
                                  LPUNKNOWN     *lppUnk)
 {
         CheckParameters_IABLogon_OpenEntry(this,
@@ -389,7 +376,6 @@ LCleanup:
 //    HrOpenRoot()
 //
 //    Parameters
-
 //          pulObjType  [in]  pointer to place to return new object's type
 //          ppUnk       [out] pointer to pointer to where to write new object
 //    Purpose
@@ -397,7 +383,6 @@ LCleanup:
 //          existing in the database. Creates the hierarchy and contents table.
 //          Listen for notifications from its children.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -455,11 +440,8 @@ LCleanup:
 //    HrOpenContainer()
 //
 //    Parameters
-
 //          pEID        [in]  pointer to entry ID of object to open
-
 //          pulObjType  [out] pointer where to write the object's type
-
 //          ppUnk       [out] pointer to pointer where to write the object
 //    Purpose
 //          Opens a container or DL object. Sets default properties and
@@ -467,7 +449,6 @@ LCleanup:
 //          table and subscribes to listen for notifications from its
 //          children.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -516,17 +497,14 @@ LCleanup:
 //    CheckEID()
 //
 //    Parameters
-
 //          cbEntryID   [in] size of entry ID
 //          pEntryID    [in] pointer to an entry ID
 //    Purpose
 //          Check if the EID is valid, what type of object is its owner, container or mailuser,
 //          foreign entry?
 //
-
 //    Return Value
 //          Code indicating the ID type, or MAPI_E_INVALID_ENTRYID is
-
 //          type can't be determined.
 //
 ULONG WINAPI CABLogon::CheckEID(ULONG cbEntryID, LPENTRYID pEntryID)
@@ -551,9 +529,7 @@ ULONG WINAPI CABLogon::CheckEID(ULONG cbEntryID, LPENTRYID pEntryID)
 //    HrNewEID()
 //
 //    Parameters
-
 //          ulFlags     [in]  entry ID abflags
-
 //          ulID        [in]  object's database ID number
 //          ulEntryType [in]  object's type
 //          pParent     [in]  block to link allocation to, if non-
@@ -605,7 +581,6 @@ STDMETHODIMP CABLogon::HrNewEID(ULONG           ulFlags,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -639,7 +614,6 @@ STDMETHODIMP CABLogon::CompareEntryIDs(ULONG       /* cbEntryID1 */,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -647,10 +621,10 @@ STDMETHODIMP CABLogon::Advise(ULONG             cbEntryID,
                               LPENTRYID         lpEntryID,
                               ULONG             ulEventMask,
                               LPMAPIADVISESINK  lpAdviseSink,
-                              ULONG            *lpulConnection)
+                              ULONG_PTR         *lpulConnection)
 {
         HRESULT         hRes = S_OK;
-        ULONG           ulCnx;
+        ULONG_PTR       ulCnx;
         ULONG           ulEntryType;
         SizedNOTIFKEY(sizeof SABP_EID, Key);
 
@@ -687,8 +661,7 @@ STDMETHODIMP CABLogon::Advise(ULONG             cbEntryID,
                                                ulEventMask,
                                                0,
                                                lpAdviseSink,
-
-                                               & ulCnx)))
+                                               &ulCnx)))
         {
                 goto LCleanup;
         }
@@ -697,7 +670,6 @@ STDMETHODIMP CABLogon::Advise(ULONG             cbEntryID,
         m_ullstAdviseCnx.push_back(ulCnx);
 
         *lpulConnection = ulCnx;
-
 
 LCleanup:
         LeaveCriticalSection(&m_cs);
@@ -710,11 +682,10 @@ LCleanup:
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
-STDMETHODIMP CABLogon::Unadvise(ULONG ulConnection)
+STDMETHODIMP CABLogon::Unadvise(ULONG_PTR ulConnection)
 {
         BOOL bRes = false;
 
@@ -722,7 +693,7 @@ STDMETHODIMP CABLogon::Unadvise(ULONG ulConnection)
 
         EnterCriticalSection(&m_cs);
 
-        for(list<ULONG>::iterator it = m_ullstAdviseCnx.begin();
+        for(list<ULONG_PTR>::iterator it = m_ullstAdviseCnx.begin();
 
             it != m_ullstAdviseCnx.end();
             it++)
@@ -753,7 +724,6 @@ STDMETHODIMP CABLogon::Unadvise(ULONG ulConnection)
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -771,7 +741,6 @@ STDMETHODIMP CABLogon::OpenStatusEntry(LPCIID          /* lpInterface */,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -794,14 +763,10 @@ STDMETHODIMP CABLogon::OpenTemplateID(ULONG          /* cbTemplateID */,
 //
 //    Purpose
 //          Returns two of the provider's templates: a user and DL template
-
 //          IMAPISuport::GetOneOffTable calls each provider's
-
 //          IABLogon::GetOneOffTable to create the merged oneoff
 //          table. Contribute provider's two rows here.
-
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -818,7 +783,6 @@ STDMETHODIMP CABLogon::GetOneOffTable(ULONG         /* ulFlags */,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -834,7 +798,6 @@ STDMETHODIMP CABLogon::PrepareRecips(ULONG           /* ulFlags */,
 //    Notify()
 //
 //    Parameters
-
 //          ulEvent         [in] notification type
 //          pParentEID      [in] pointer to object's parent entry ID
 //          pObjectEID      [in] pointer to object's entry ID
@@ -846,9 +809,7 @@ STDMETHODIMP CABLogon::PrepareRecips(ULONG           /* ulFlags */,
 //          a single notification structure and calls the support object's
 //          Notify to broadcast the notification.
 //
-
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -888,7 +849,6 @@ STDMETHODIMP CABLogon::HrNotify(ULONG           ulEvent,
 //    HrGetCntsTblRowProps()
 //
 //    Parameters
-
 //          pRec        [in] pointer to CRecord standing for a content table
 //                           row entry.
 //          ppProps     [out] pointer to pointer to props for a content row.
@@ -898,9 +858,7 @@ STDMETHODIMP CABLogon::HrNotify(ULONG           ulEvent,
 //          other than CABContainer, is because that CMailUser also calls it
 //          to generate a content row when CMailUser needs to NOTIFY mapi.
 //
-
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise.
 //
@@ -1006,13 +964,11 @@ inline BOOL operator !=(const MAPIUID & lhs, const MAPIUID & rhs)
 //    operator ==()
 //
 //    Parameters
-
 //          lhs         [in] reference to the left side ID
 //          rhs         [in] reference to the right side ID
 //    Purpose
 //          Equality operator for IDs.
 //
-
 //    Return Value
 //          TRUE if both are equal, FALSE otherwise.
 //
@@ -1029,13 +985,11 @@ BOOL operator ==(const SABP_ID & lhs, const SABP_ID & rhs)
 //    operator ==()
 //
 //    Parameters
-
 //          lhs         [in] reference to the left side entry ID
 //          rhs         [in] reference to the right side entry ID
 //    Purpose
 //          Equality operator for entry IDs.
 //
-
 //    Return Value
 //          TRUE if both are equal, FALSE otherwise.
 //

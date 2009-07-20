@@ -25,12 +25,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    CABContainer()
-
 //
 //    Purpose
 //          Class constructor.
 //
-
 //    Return Value
 //          none.
 //
@@ -56,7 +54,6 @@ CABContainer::CABContainer(HINSTANCE    hInst,
                 m_pSupObj->AddRef();
         if (m_pDB)
                 m_pDB->AddRef();
-
 
         ZeroMemory(&m_EID, sizeof SABP_EID);
         if (pEID)
@@ -92,7 +89,6 @@ STDMETHODIMP CABContainer::HrInit()
 
         m_pPropData->AddRef();
 
-
         // Set default container props.
         if (FAILED(hRes = HrSetDefaultContProps(&m_EID)))
                 goto LCleanup;
@@ -115,19 +111,15 @@ LCleanup:
 //    HrSubscribe()
 //
 //    Parameters
-
 //          none.
 //
 //    Purpose
 //          Asks MAPI to send notifications for a fnevTableModified. This
 //          is to update the contents table when a child is added/deleted
 //          or changed. Use the entry ID as the key, it's unique, and
-
 //          the child can generate it easily by getting the parent list
-
 //          when the child needs to notify the provider.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -164,16 +156,13 @@ STDMETHODIMP CABContainer::HrSubscribe()
 //
 //    Purpose
 //          Initialize a list of properties with default values for a container.
-
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
 STDMETHODIMP CABContainer::HrSetDefaultContProps(PSABP_EID pEID)
 {
         enum
-
         {
                 CONT_FLAGS,
                 EID,
@@ -202,26 +191,21 @@ STDMETHODIMP CABContainer::HrSetDefaultContProps(PSABP_EID pEID)
         Props[OBJ_TYPE].ulPropTag       = PR_OBJECT_TYPE;
         Props[OBJ_TYPE].Value.l         = MAPI_ABCONT;
 
-
         Props[DISP_TYPE].ulPropTag      = PR_DISPLAY_TYPE;
         Props[DISP_TYPE].Value.l        = DT_MODIFIABLE;
 
         Props[DISP_NAME].ulPropTag      = PR_DISPLAY_NAME;
         Props[DISP_NAME].Value.LPSZ     = m_EID.ID.Num == DIR_ID_NUM
-
                                           ? SZ_PSS_SAMPLE_AB : NULL_STRING;
-
 
         Props[DEPTH].ulPropTag          = PR_DEPTH;
         Props[DEPTH].Value.l            = 0;
-
 
         Props[ACCESS].ulPropTag         = PR_ACCESS;
         Props[ACCESS].Value.l           = MAPI_MODIFY;
 
         Props[STATUS].ulPropTag         = PR_STATUS;
         Props[STATUS].Value.l           = 0;
-
 
         return SetProps(NUM_PROPS, (LPSPropValue)&Props, NULL);
 }
@@ -236,7 +220,6 @@ STDMETHODIMP CABContainer::HrSetDefaultContProps(PSABP_EID pEID)
 //    Purpose
 //          Class destructor. Releases all outstanding objects.
 //
-
 //    Return Value
 //          none.
 CABContainer::~CABContainer()
@@ -277,9 +260,7 @@ CABContainer::~CABContainer()
 //    Purpose
 //          Returns an interface if supported.
 //
-
 //
-
 //    Return Value
 //          NOERROR on success, E_NOINTERFACE if the interface
 //          can't be returned.
@@ -331,7 +312,6 @@ STDMETHODIMP_ (ULONG) CABContainer::AddRef (void)
 //
 //    Purpose
 //          Decreases the usage count of this object. If the
-
 //          count is down to zero, object deletes itself.
 //
 //    Return Value
@@ -361,7 +341,6 @@ STDMETHODIMP_ (ULONG) CABContainer::Release (void)
 //    Purpose
 //          Gets detailed error information based on hResult.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -385,7 +364,6 @@ STDMETHODIMP CABContainer::GetLastError(HRESULT         hResult,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -401,7 +379,6 @@ STDMETHODIMP  CABContainer::SaveChanges(ULONG /* ulFlags */)
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -453,7 +430,6 @@ STDMETHODIMP CABContainer::SetProps(ULONG               cValues,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -476,7 +452,6 @@ STDMETHODIMP  CABContainer::GetPropList(ULONG ulFlags,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -495,14 +470,13 @@ STDMETHODIMP CABContainer::DeleteProps(LPSPropTagArray          lpPropTagArray,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
 STDMETHODIMP CABContainer::CopyTo(ULONG                 ciidExclude,
                                   LPCIID                rgiidExclude,
                                   LPSPropTagArray       lpExcludeProps,
-                                  ULONG                 ulUIParam,
+                                  ULONG_PTR             ulUIParam,
                                   LPMAPIPROGRESS        lpProgress,
                                   LPCIID                lpInterface,
                                   LPVOID                lpDestObj,
@@ -538,12 +512,11 @@ STDMETHODIMP CABContainer::CopyTo(ULONG                 ciidExclude,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
 STDMETHODIMP CABContainer::CopyProps(LPSPropTagArray       lpIncludeProps,
-                                     ULONG                 ulUIParam,
+                                     ULONG_PTR             ulUIParam,
                                      LPMAPIPROGRESS        lpProgress,
                                      LPCIID                lpInterface,
                                      LPVOID                lpDestObj,
@@ -576,7 +549,6 @@ STDMETHODIMP CABContainer::CopyProps(LPSPropTagArray       lpIncludeProps,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -607,7 +579,6 @@ STDMETHODIMP CABContainer::GetNamesFromIDs(LPSPropTagArray  *lppPropTags,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -639,7 +610,6 @@ STDMETHODIMP CABContainer::GetIDsFromNames(ULONG             cPropNames,
 //          Returns an object when requested a supported property
 //          of type PT_OBJECT.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -719,25 +689,18 @@ LCleanup:
 //    HrOpenTemplates()
 //
 //    Parameters
-
 //          lppTable    [out] pointer to pointer to hold new oneoff table
 //    Purpose
 //          Creates a merged oneoff table containing native
-
 //          templates plus all foreign templates in the session.
 //
 //          Let anyone put in entries, so the oneoff table is a
-
 //          merge of the session table (with the other AB's templates).
-
 //          This is a little tricky. Other ABs call
-
 //          IMAPISupport::GetOneOffTable to get the provider's templates so they
-
 //          can put entries of the provider's type in their databases.
 //
 //          IABLogon::GetOneOffTable gets called --once-- to
-
 //          create the merged table.
 //
 //    Return Value
@@ -865,10 +828,8 @@ LCleanup:
 //    Purpose
 //          If there is underlying data in the cache, return a view, otherwise
 //          create the underlying data, cache it and return a view.
-
 //          Contents tables are sorted ascending on PR_DISPLAY_NAME
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -932,13 +893,11 @@ LCleanup:
 //    HrCreateCntsTable()
 //
 //    Parameters
-
 //          ppCTbl     [out] pointer to pointer to the content table to create
 //
 //    Purpose
 //          Create a LPTABLEDATA object to contain the content table rows.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -1023,9 +982,7 @@ LCleanup:
 //          Returns a view of
 //          the cached hierarchy table data if it exists. If it doesn't
 //          the table data is created and cached first.
-
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -1078,15 +1035,12 @@ LCleanup:
 //    CreateHierTbl()
 //
 //    Parameters
-
 //          ppHTbl  [out] pointer to pointer to the hierarchy table to create.
 //
 //    Purpose
 //          Creates the underlying data for the container's
-
 //          hierarchy table, caches it,and returns a view.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -1140,7 +1094,6 @@ LCleanup:
 //    HrLoadHierTblProps()
 //
 //    Parameters
-
 //          ppProps  [out] pointer to pointer to SPropValue
 //
 //    Purpose
@@ -1238,7 +1191,6 @@ LCleanup:
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          MAPI_E_NO_SUPPORT
 //
@@ -1259,12 +1211,10 @@ STDMETHODIMP CABContainer::OpenEntry(ULONG       /* cbEntryID */,
 //    HrCreateMailUser()
 //
 //    Parameters
-
 //          pEID        [in] Temp EntryID of the mail user to create.
 //
 //    Purpose
 //
-
 //
 //    Return Value
 //          MAPI_E_USER_CANCEL for success, so MAPI will do nothing more.
@@ -1323,12 +1273,9 @@ STDMETHODIMP CABContainer::HrCreateMailUser(PSABP_EID pEID)
 //          Creates a new entry in this container. A new entry can be a
 //          mailuser, a DL (a container), a foreign DL or foreign mailuser.
 //          The entry ID tells us whether the entry is foreign or native.
-
 //          Creates a new record in the database, It's in a limbo state,
 //          (so add to orphan rec list, until SaveChanges, then
-
 //          insert it in its parent).
-
 //
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
@@ -1374,12 +1321,11 @@ STDMETHODIMP CABContainer::CreateEntry(ULONG        cbEntryID,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
 STDMETHODIMP CABContainer::CopyEntries(LPENTRYLIST        /* lpEntries */,
-                                       ULONG              /* ulUIParam */,
+                                       ULONG_PTR          /* ulUIParam */,
                                        LPMAPIPROGRESS     /* lpProgress */,
                                        ULONG              /* ulFlags */)
 {
@@ -1396,7 +1342,6 @@ STDMETHODIMP CABContainer::CopyEntries(LPENTRYLIST        /* lpEntries */,
 //          Converts the
 //          lpEntries into a list and deletes each child.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -1449,7 +1394,6 @@ LCleanup:
 //    DoANR()
 //
 //    Parameters
-
 //          szTarget        [in]  recipient name to resolve
 //          pSearchTbl      [in]  table to look for recipient in
 //          psrResolved     [out] resolved ADRENTRY
@@ -1458,24 +1402,19 @@ LCleanup:
 //    Purpose
 //          This fcn does ambiguous name resolution on szTarget in
 //          pSearchTable. Return a single row in *psrResolved if
-
 //          a match is found and pass back NULL and return MAPI_E_AMBIGUOUS or
-
 //          MAPI_E_NOT_FOUND otherwise.
 //
 //          If a match is not found,  restrict the container's
 //          contents table to rows that have the target string's first token as a
-
 //          substring in the display name. Then run a simple parser on each row
 //          to determine if the rest of the tokens match exactly, partially match
-
 //          (ambiguous), or don't match at all
 //
 //          A match is defined to be one and only one exact match (token for token)
 //          or exactly 1 ambiguous (partial) match.
 //
 //          Do this because MAPI defines an ambiguous match to be > 1 match.
-
 //          The implementation determines what is meant by a match. If there is
 //          a single non-exact match, that is, returns a single row in Restrict w/
 //          PR_ANR, the CheckNames dialog treats it like a match anyway.
@@ -1550,25 +1489,19 @@ LCleanup:
 //    CopyAdrEntry()
 //
 //    Parameters
-
 //
-
 //
 //    Purpose
 //          Copies an SRow's properties into an ADRENTRY without duplicates,
 //          reallocating a larger ADRENTRY if necessary. The old ADRENTRY
-
 //          property array is freed and the new one is plugged into its
 //          place.
-
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
 
 STDMETHODIMP CABContainer::HrCopyAdrEntry(LPSPropTagArray pTags,
-
                                           LPSRow          pRow,
                                           LPADRENTRY      pAdrEntry)
 {
@@ -1593,7 +1526,7 @@ STDMETHODIMP CABContainer::HrCopyAdrEntry(LPSPropTagArray pTags,
                 MergedProps.push_back(pAdrEntry->rgPropVals[i].ulPropTag);
 
         // cTotalProps is in case of failure, use it to free
-        cExistingProps = MergedProps.size();
+        cExistingProps = (ULONG) MergedProps.size();
 
         for (ULONG i = 0; i < pTags->cValues; i++)
         {
@@ -1613,7 +1546,7 @@ STDMETHODIMP CABContainer::HrCopyAdrEntry(LPSPropTagArray pTags,
 
         }
 
-        cTotalProps = MergedProps.size();
+        cTotalProps = (ULONG) MergedProps.size();
 
 
         if (FAILED(hRes = vpfnAllocBuff(cTotalProps  *sizeof SPropValue,
@@ -1689,17 +1622,13 @@ LCleanup:
 //    Purpose
 //          Resolves names against the container's contents table.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
 
 STDMETHODIMP CABContainer::ResolveNames(LPSPropTagArray lpPropTagArray,
-
                                         ULONG           ulFlags,
-
                                         LPADRLIST       lpAdrList,
-
                                         LPFlagList      lpFlagList)
 {
         HRESULT           hRes     = S_OK;
@@ -1724,12 +1653,9 @@ STDMETHODIMP CABContainer::ResolveNames(LPSPropTagArray lpPropTagArray,
         if (FAILED(hRes = pCntTbl->SetColumns(pCols, TBL_BATCH)))
                 goto LCleanup;
 
-
         // if a name is unresolved, try to parse it
         for (ULONG i = 0; i < lpFlagList->cFlags; i++)
-
         {
-
                 if (MAPI_UNRESOLVED == lpFlagList->ulFlag[i])
                 {
                         LPSPropValue pProp = PpropFindProp(lpAdrList->aEntries[i].rgPropVals,
@@ -1740,7 +1666,6 @@ STDMETHODIMP CABContainer::ResolveNames(LPSPropTagArray lpPropTagArray,
 
                         hRes = DoANR(pProp->Value.LPSZ,
                                      pCntTbl,
-
                                      &ResolvedRow,
                                      PR_DISPLAY_NAME);
 
@@ -1789,7 +1714,6 @@ LCleanup:
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -1813,7 +1737,6 @@ STDMETHODIMP CABContainer::SetSearchCriteria(LPSRestriction /* pRestriction */,
 //
 //    Refer to the MSDN documentation for more information.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -1838,7 +1761,6 @@ STDMETHODIMP CABContainer::GetSearchCriteria(ULONG             /* ulFlags */,
 //    HrGetView()
 //
 //    Parameters
-
 //          pTblData         [in]  pointer to underlying table data
 //          lpSSortOrderSet  [in]  view sort order
 //          lpfCallerRelease [in]  view release callback
@@ -1848,7 +1770,6 @@ STDMETHODIMP CABContainer::GetSearchCriteria(ULONG             /* ulFlags */,
 //    Purpose
 //          Returns a view of the wrapper table implementation.
 //
-
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
@@ -1905,12 +1826,10 @@ LCleanup:
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    CTblAdviseSink()
-
 //
 //    Purpose
 //          Class constructor.
 //
-
 //    Return Value
 //          none.
 CTblAdviseSink::CTblAdviseSink(LPCABContainer pCont)
@@ -1923,12 +1842,10 @@ CTblAdviseSink::CTblAdviseSink(LPCABContainer pCont)
 ///////////////////////////////////////////////////////////////////////////////
 //
 //    ~CTblAdviseSink()
-
 //
 //    Purpose
 //          Class destructor.
 //
-
 //    Return Value
 //          none.
 CTblAdviseSink::~CTblAdviseSink()
@@ -1964,7 +1881,6 @@ STDMETHODIMP_ (ULONG) CTblAdviseSink::AddRef()
 //
 //    Purpose
 //          Decreases the usage count of this object. If the
-
 //          count is down to zero, object deletes itself.
 //
 //    Return Value
@@ -1990,15 +1906,12 @@ STDMETHODIMP_ (ULONG) CTblAdviseSink::Release()
 //    QueryInterface()
 //
 //    Parameters
-
 //          See the OLE documentation for details.
 //
 //    Purpose
 //          Returns an interface if supported.
 //
-
 //
-
 //    Return Value
 //          NOERROR on success, E_NOINTERFACE if the interface
 //          can't be returned.
@@ -2029,7 +1942,6 @@ STDMETHODIMP CTblAdviseSink::QueryInterface(const IID &riid, LPVOID *ppvObj)
 //    Return Value
 //          S_OK on success, a MAPI error code otherwise
 //
-
 STDMETHODIMP_ (ULONG) CTblAdviseSink::OnNotify(ULONG cNotif, LPNOTIFICATION pNotifs)
 {
         HRESULT hRes = S_OK;

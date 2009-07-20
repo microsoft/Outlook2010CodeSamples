@@ -90,7 +90,7 @@ STDMETHODIMP CXPProvider::Shutdown(ULONG FAR* /*lpulFlags*/)
 ***********************************************************************************************/
 
 STDMETHODIMP CXPProvider::TransportLogon(LPMAPISUP			lpMAPISup,
-										 ULONG				/*ulUIParam*/,
+										 ULONG_PTR			/*ulUIParam*/,
 										 LPTSTR				/*lpszProfileName*/,
 										 ULONG FAR*			lpulFlags,
 										 LPMAPIERROR FAR*	/*lppMAPIError*/,

@@ -295,8 +295,8 @@ STDMETHODIMP CXPLogon::TransportLogoff(ULONG /*ulFlags*/)
 
 STDMETHODIMP CXPLogon::SubmitMessage(ULONG			/*ulFlags*/,
 									 LPMESSAGE		lpMessage,
-									 ULONG FAR *	lpulMsgRef,
-									 ULONG FAR *	lpulReturnParm)
+									 ULONG_PTR FAR *lpulMsgRef,
+									 ULONG_PTR FAR *lpulReturnParm)
 {
 	Log(true, _T("CXPLogon::SubmitMessage function called\n"));
 
@@ -460,7 +460,7 @@ STDMETHODIMP CXPLogon::SubmitMessage(ULONG			/*ulFlags*/,
 
 ***********************************************************************************************/
 
-STDMETHODIMP CXPLogon::EndMessage(ULONG			/*ulMsgRef*/,
+STDMETHODIMP CXPLogon::EndMessage(ULONG_PTR		/*ulMsgRef*/,
 								  ULONG FAR *	lpulFlags)
 {
 	Log(true, _T("CXPLogon::EndMessage function called\n"));
@@ -538,7 +538,7 @@ STDMETHODIMP CXPLogon::Poll(ULONG FAR *	lpulIncoming)
 
 STDMETHODIMP CXPLogon::StartMessage(ULONG		/*ulFlags*/,
 									LPMESSAGE	lpMessage,
-									ULONG FAR *	lpulMsgRef)
+									ULONG_PTR FAR *lpulMsgRef)
 {
 	Log(true, _T("CXPLogon::StartMessage function called\n"));
 
@@ -676,8 +676,6 @@ STDMETHODIMP CXPLogon::OpenStatusEntry(LPCIID               lpInterface,
 {
 	Log(true, _T("CXPLogon::OpenStatusEntry function called\n"));
 
-	_asm int(3)
-
 	if (!lpulObjType || ! lppEntry)
 		return MAPI_E_INVALID_PARAMETER;
 
@@ -715,12 +713,10 @@ STDMETHODIMP CXPLogon::OpenStatusEntry(LPCIID               lpInterface,
 
 ***********************************************************************************************/
 
-STDMETHODIMP CXPLogon::ValidateState(ULONG ulUIParam,
+STDMETHODIMP CXPLogon::ValidateState(ULONG_PTR ulUIParam,
 									 ULONG ulFlags)
 {
 	Log(true, _T("CXPLogon::ValidateState function called\n"));
-
-	_asm int(3)
 
 	HRESULT hRes = S_OK;
 
@@ -746,7 +742,7 @@ STDMETHODIMP CXPLogon::ValidateState(ULONG ulUIParam,
 
 ***********************************************************************************************/
 
-STDMETHODIMP CXPLogon::FlushQueues(ULONG		/*ulUIParam*/,
+STDMETHODIMP CXPLogon::FlushQueues(ULONG_PTR	/*ulUIParam*/,
 								   ULONG		/*cbTargetTransport*/,
 								   LPENTRYID	/*lpTargetTransport*/,
 								   ULONG		ulFlags)
@@ -810,7 +806,7 @@ HRESULT CXPLogon::GenerateIdentity()
 			size_t cbSearchKey = (m_cchInboxPath + CCH_A(MRXP_ADDRTYPE_A) + 1) * sizeof(char);
 			LPSTR pszSearchKey = NULL;
 
-			hRes = MyAllocateMore(cbSearchKey, m_pIdentityProps, (LPVOID*)&pszSearchKey);
+			hRes = MyAllocateMore((ULONG) cbSearchKey, m_pIdentityProps, (LPVOID*)&pszSearchKey);
 			if (SUCCEEDED(hRes) && pszSearchKey)
 			{
 				hRes = StringCbPrintfA(pszSearchKey, cbSearchKey, "%s:%s",
@@ -818,7 +814,7 @@ HRESULT CXPLogon::GenerateIdentity()
 				if (SUCCEEDED(hRes))
 				{
 					m_pIdentityProps[IDENTITY_SEARCH_KEY].ulPropTag = PR_SENDER_SEARCH_KEY;
-					m_pIdentityProps[IDENTITY_SEARCH_KEY].Value.bin.cb = cbSearchKey;
+					m_pIdentityProps[IDENTITY_SEARCH_KEY].Value.bin.cb = (ULONG) cbSearchKey;
 					m_pIdentityProps[IDENTITY_SEARCH_KEY].Value.bin.lpb = (LPBYTE)pszSearchKey;
 
 					SBinary sbEID = {0};
@@ -1392,7 +1388,7 @@ HRESULT CXPLogon::NewMailWaiting(LPTSTR* ppszNewMailFile, LPFILETIME pDeliveredT
 		{
 			cbFileFilter = (m_cchInboxPath + CCH(MSG_FILTER) + 1) * sizeof(TCHAR);
 
-			hRes = MyAllocateBuffer(cbFileFilter, (LPVOID*)&m_pszFileFilter);
+			hRes = MyAllocateBuffer((ULONG) cbFileFilter, (LPVOID*)&m_pszFileFilter);
 			if (SUCCEEDED(hRes) && m_pszFileFilter)
 			{
 				hRes = StringCbPrintf(m_pszFileFilter, cbFileFilter, _T("%hs\\%s"),
@@ -1425,7 +1421,7 @@ HRESULT CXPLogon::NewMailWaiting(LPTSTR* ppszNewMailFile, LPFILETIME pDeliveredT
 			{
 				// +2 for the Null terminator and the '\' between
 				cbFileName += (m_cchInboxPath + 2) * sizeof(TCHAR);
-				hRes = MyAllocateBuffer(cbFileName, (LPVOID*)ppszNewMailFile);
+				hRes = MyAllocateBuffer((ULONG) cbFileName, (LPVOID*)ppszNewMailFile);
 				if (SUCCEEDED(hRes) && *ppszNewMailFile)
 				{
 					hRes = StringCbPrintf(*ppszNewMailFile, cbFileName, _T("%hs\\%s"),
@@ -1779,7 +1775,7 @@ HRESULT CXPLogon::SetNDRText(ADRENTRY adrRecip, HRESULT hResSendError, LPVOID pP
 
 			cbLen += NDR_ERROR_PAD;
 
-			hRes = MyAllocateMore(cbLen, pParent, (LPVOID*)&szNDRText);
+			hRes = MyAllocateMore((ULONG) cbLen, pParent, (LPVOID*)&szNDRText);
 			if (SUCCEEDED(hRes) && szNDRText)
 			{
 				hRes = StringCbPrintf(szNDRText, cbLen,
@@ -1939,7 +1935,7 @@ HRESULT CXPLogon::CopySPropValueArray(ULONG cProps, LPSPropValue lpSourceProps, 
 					{
 						cbString++;
 
-						hRes = MyAllocateMore(cbString, lpParent, (LPVOID*)&((*lppTargetProps)[i].Value.lpszA));
+						hRes = MyAllocateMore((ULONG) cbString, lpParent, (LPVOID*)&((*lppTargetProps)[i].Value.lpszA));
 						if (SUCCEEDED(hRes) && (*lppTargetProps)[i].Value.lpszA)
 						{
 							hRes = StringCbCopyA((*lppTargetProps)[i].Value.lpszA, cbString,
@@ -1957,7 +1953,7 @@ HRESULT CXPLogon::CopySPropValueArray(ULONG cProps, LPSPropValue lpSourceProps, 
 					{
 						cbString += sizeof(WCHAR);
 
-						hRes = MyAllocateMore(cbString, lpParent, (LPVOID*)&((*lppTargetProps)[i].Value.lpszW));
+						hRes = MyAllocateMore((ULONG) cbString, lpParent, (LPVOID*)&((*lppTargetProps)[i].Value.lpszW));
 						if (SUCCEEDED(hRes) && (*lppTargetProps)[i].Value.lpszW)
 						{
 							hRes = StringCbCopyW((*lppTargetProps)[i].Value.lpszW, cbString,
@@ -1968,7 +1964,7 @@ HRESULT CXPLogon::CopySPropValueArray(ULONG cProps, LPSPropValue lpSourceProps, 
 				break;
 			default:
 				// Note: this only handles string types, PT_LONG, and PT_BOOLEAN
-				_asm int(3)
+				break;
 			}
 
 			if (FAILED(hRes))

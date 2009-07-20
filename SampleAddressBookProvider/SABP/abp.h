@@ -37,7 +37,6 @@ DEFINE_GUID(SABP_UID,
 #define ONEOFF_USER_ID          0xfffffffe
 #define DONT_CARE               0xffffffff
 
-
 #define BASE_PROVIDER_ID        0x6600  // From 6600 to 67FF is for Provider-defined
                                         //  internal non-transmittable property
                                         //  Defined for this provider.
@@ -71,7 +70,6 @@ extern "C"
                                             LPSPropValue        pCfgProps,
                                             LPPROVIDERADMIN     pAdminProvObj,
                                             LPMAPIERROR         *ppMAPIError);
-
 }
 
 typedef struct
@@ -121,8 +119,6 @@ extern LPALLOCATEMORE   vpfnAllocMore;
 
 extern LPFREEBUFFER     vpfnFreeBuff;
 
-
-
 class CABProvider : public IABProvider
 {
 public:
@@ -138,8 +134,6 @@ private :
         HINSTANCE               m_hInst;
         CRITICAL_SECTION        m_cs;
 };
-
-
 
 class CABLogon : public IABLogon
 {
@@ -192,9 +186,8 @@ private:
         CABContainer            *m_pRootCont;   // Pointer to the root container.
         CABContainer            *m_pDirCont;    // Pointer to the dir container in root.
         PCABDatabase            m_pDB;          // Pointer to the database for the provider.
-        list<ULONG>             m_ullstAdviseCnx; // List<ULONG> to save advise connection.
+        list<ULONG_PTR>          m_ullstAdviseCnx; // List<ULONG> to save advise connection.
 };
-
 
 class CTblAdviseSink : public IMAPIAdviseSink
 {
@@ -202,9 +195,7 @@ public:
         CTblAdviseSink(LPCABContainer m_pCont);
         ~CTblAdviseSink();
 
-
         MAPI_IUNKNOWN_METHODS(IMPL);
-
 
         STDMETHODIMP_ (ULONG)   OnNotify(ULONG cNotif, LPNOTIFICATION pNotifs);
 
@@ -223,43 +214,34 @@ public:
         MAPI_IMAPICONTAINER_METHODS(IMPL);
         MAPI_IABCONTAINER_METHODS(IMPL);
 
-
         CABContainer(HINSTANCE          hInst,
                      PSABP_EID          pEID,
                      LPCABLogon         pLogon,
                      LPMAPISUP          pSupObj,
                      PCABDatabase       pDB);
 
-
         virtual ~CABContainer();
-
 
         STDMETHODIMP HrInit();
 
 private:
         STDMETHODIMP    HrSubscribe();
 
-
         STDMETHODIMP    HrSetDefaultContProps(PSABP_EID  pEID);
-
 
         STDMETHODIMP    HrCreateHierTable(LPTABLEDATA *ppTable);
 
-
         STDMETHODIMP    HrCreateCntsTable(LPTABLEDATA *ppTable);
-
 
         STDMETHODIMP    HrOpenTemplates(LPMAPITABLE     *lppTable);
 
         STDMETHODIMP    HrLoadHierTblProps(LPSPropValue *ppProps);
-
 
         STDMETHODIMP    HrGetView(LPTABLEDATA           pTblData,
                                   LPSSortOrderSet       lpSSortOrderSet,
                                   CALLERRELEASE FAR     *lpfCallerRelease,
                                   ULONG                 ulCallerData,
                                   LPMAPITABLE FAR       *lppMAPITable);
-
 
         STDMETHODIMP    HrCopyAdrEntry(LPSPropTagArray  pTags,
                                        LPSRow           pRow,
@@ -278,7 +260,7 @@ private:
         LPTABLEDATA             m_pCntsTblData; // Pointer to the ITABLEDATA object of the provider's content table.
         LPTABLEDATA             m_pHierTblData; // Pointer to the ITABLEDATA object of the provider's hierachy table.
         LPPROPDATA              m_pPropData;    // Pointer to the IPROPDATA object of the provider's props.
-        ULONG                   m_ulCnx;        // cnx no. to get notifications on
+        ULONG_PTR               m_ulCnx;        // cnx no. to get notifications on
         LPCTblAdviseSink        m_pAdviseSink;  // Pointer to an IAdviseSink object.
         BOOL                    m_fInited;      // Flag to identify whether CABContainer is initialized.
 };
@@ -289,22 +271,18 @@ public:
         MAPI_IUNKNOWN_METHODS(IMPL);
         MAPI_IMAPIPROP_METHODS(IMPL);
 
-
         CMailUser(HINSTANCE     hInst,
                   PSABP_EID     pEID,
                   LPCABLogon    pLogon,
                   LPMAPISUP     pSupObj,
                   PCABDatabase  pDB);
 
-
         ~CMailUser();
-
 
         STDMETHODIMP    HrInit();
 
 private:
         STDMETHODIMP    HrSetDefaultProps(PCRecord pRec);
-
 
         STDMETHODIMP    HrNotifyParents(PCRecord pRec, ULONG ulTableEvent);
 
@@ -349,7 +327,6 @@ public:
                 LPPROFSECT      pProfSecn);
         ~CConfig();
 
-
         STDMETHODIMP    HrInit();
 
         STDMETHODIMP    HrDoConfig();
@@ -381,7 +358,6 @@ STDMETHODIMP  DoANR(LPTSTR        szTarget,
 
 // Logon props.
 typedef enum
-
 {
         LOGON_DB_PATH,
         LOGON_DISP_NAME,
@@ -403,7 +379,6 @@ const SizedSPropTagArray(LOGON_NUM_PROPS, vsptLogonTags) =
 
 // Contents table columns.
 enum
-
 {
         CT_EID,
         CT_INST_KEY,
@@ -432,7 +407,6 @@ const SizedSPropTagArray(NUM_CTBL_COLS, vsptCntTbl) =
 
 // Hierarchy table columns
 enum
-
 {
         HT_INST_KEY,
         HT_DEPTH,
@@ -470,6 +444,5 @@ const SizedSPropTagArray(NUM_HTBL_PROPS, vsptHierTbl) =
 BOOL operator ==(const SABP_ID & lhs, const SABP_ID & rhs);
 BOOL operator ==(const SABP_EID & lhs, const SABP_EID & rhs);
 BOOL operator !=(const MAPIUID & lhs, const MAPIUID & rhs);
-
 
 #endif /* _ABP_H_ */

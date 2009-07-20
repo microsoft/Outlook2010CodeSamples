@@ -386,7 +386,7 @@ STDMETHODIMP CXPStatus::DeleteProps(LPSPropTagArray /*lpPropTagArray*/,
 STDMETHODIMP CXPStatus::CopyTo(ULONG /*ciidExclude*/,
 							   LPCIID /*rgiidExclude*/,
 							   LPSPropTagArray /*lpExcludeProps*/,
-							   ULONG /*ulUIParam*/,
+							   ULONG_PTR /*ulUIParam*/,
 							   LPMAPIPROGRESS /*lpProgress*/,
 							   LPCIID /*lpInterface*/,
 							   LPVOID /*lpDestObj*/,
@@ -406,7 +406,7 @@ STDMETHODIMP CXPStatus::CopyTo(ULONG /*ciidExclude*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::CopyProps(LPSPropTagArray /*lpIncludeProps*/,
-								  ULONG /*ulUIParam*/,
+								  ULONG_PTR /*ulUIParam*/,
 								  LPMAPIPROGRESS /*lpProgress*/,
 								  LPCIID /*lpInterface*/,
 								  LPVOID /*lpDestObj*/,
@@ -464,7 +464,7 @@ STDMETHODIMP CXPStatus::GetIDsFromNames(ULONG /*cPropNames*/,
 
 ***********************************************************************************************/
 
-STDMETHODIMP CXPStatus::ValidateState(ULONG /*ulUIParam*/,
+STDMETHODIMP CXPStatus::ValidateState(ULONG_PTR /*ulUIParam*/,
 									  ULONG /*ulFlags*/)
 {
 	Log(true, _T("CXPStatus::ValidateState function called\n"));
@@ -499,12 +499,10 @@ STDMETHODIMP CXPStatus::ValidateState(ULONG /*ulUIParam*/,
 
 ***********************************************************************************************/
 
-STDMETHODIMP CXPStatus::SettingsDialog(ULONG /*ulUIParam*/,
+STDMETHODIMP CXPStatus::SettingsDialog(ULONG_PTR /*ulUIParam*/,
 									   ULONG /*ulFlags*/)
 {
 	Log(true, _T("CXPStatus::SettingsDialog function called\n"));
-
-	_asm int(3)
 
 	HRESULT hRes = S_OK;
 
@@ -534,7 +532,7 @@ STDMETHODIMP CXPStatus::ChangePassword(LPTSTR /*lpOldPass*/,
 
 ***********************************************************************************************/
 
-STDMETHODIMP CXPStatus::FlushQueues(ULONG /*ulUIParam*/,
+STDMETHODIMP CXPStatus::FlushQueues(ULONG_PTR /*ulUIParam*/,
 									ULONG /*cbTargetTransport*/,
 									LPENTRYID /*lpTargetTransport*/,
 									ULONG ulFlags)
@@ -662,7 +660,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 				// NULL terminator
 				cbSourceLen += sizeof(char);
 
-				hRes = MyAllocateMore(cbSourceLen, pParent, (LPVOID*)&(pspvDestination->Value.lpszA));
+				hRes = MyAllocateMore((ULONG) cbSourceLen, pParent, (LPVOID*)&(pspvDestination->Value.lpszA));
 				if (SUCCEEDED(hRes) && pspvDestination->Value.lpszA)
 				{
 					hRes = StringCbCopyA(pspvDestination->Value.lpszA, cbSourceLen, spvSource.Value.lpszA);
@@ -677,7 +675,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 				// NULL terminator
 				cbSourceLen += sizeof(WCHAR);
 
-				hRes = MyAllocateMore(cbSourceLen, pParent, (LPVOID*)&(pspvDestination->Value.lpszW));
+				hRes = MyAllocateMore((ULONG) cbSourceLen, pParent, (LPVOID*)&(pspvDestination->Value.lpszW));
 				if (SUCCEEDED(hRes) && pspvDestination->Value.lpszW)
 				{
 					hRes = StringCbCopyW(pspvDestination->Value.lpszW, cbSourceLen, spvSource.Value.lpszW);
@@ -697,7 +695,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 			cchStringA++;
 
 			int cchWideChars = 0;
-			cchWideChars = MultiByteToWideChar(CP_ACP, 0, spvSource.Value.lpszA, cchStringA,
+			cchWideChars = MultiByteToWideChar(CP_ACP, 0, spvSource.Value.lpszA, (int) cchStringA,
 							NULL, 0);
 			if (cchWideChars > 0)
 			{
@@ -706,7 +704,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 				if (SUCCEEDED(hRes) && pspvDestination->Value.lpszW)
 				{
 					int iRet = 0;
-					iRet = MultiByteToWideChar(CP_ACP, 0, spvSource.Value.lpszA, cchStringA,
+					iRet = MultiByteToWideChar(CP_ACP, 0, spvSource.Value.lpszA, (int) cchStringA,
 						pspvDestination->Value.lpszW, cchWideChars);
 					if (iRet <= 0)
 					{
@@ -734,7 +732,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 			int cchMBChars = 0;
 
 			cchMBChars = WideCharToMultiByte(CP_ACP, 0, spvSource.Value.lpszW,
-					cchStringW, NULL, 0, NULL, NULL);
+					(int) cchStringW, NULL, 0, NULL, NULL);
 
 			if (cchMBChars > 0)
 			{
@@ -745,7 +743,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 					int iRet = 0;
 
 					iRet = WideCharToMultiByte(CP_ACP, 0, spvSource.Value.lpszW,
-						cchStringW, pspvDestination->Value.lpszA, cchMBChars, NULL, NULL);
+						(int) cchStringW, pspvDestination->Value.lpszA, cchMBChars, NULL, NULL);
 					if (iRet <= 0)
 					{
 						hRes = HRESULT_FROM_WIN32(::GetLastError());
