@@ -1,12 +1,6 @@
 #pragma once
 
-#define INITGUID
-#define USES_IID_IMAPIPropData
-#define USES_IID_IXPProvider
-#define USES_IID_IXPLogon
-#define USES_IID_IMessage
-#define USES_IID_IMAPIStatus
-#define USES_IID_IMAPIProp
+
 
 #include <mapix.h>
 #include <mapispi.h>

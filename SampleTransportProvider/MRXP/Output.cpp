@@ -1,4 +1,4 @@
-#include "mrxp.h"
+#include "stdafx.h"
 
 BOOL g_bDoFileLogging = false;
 BOOL g_bDoDebugLogging = false;

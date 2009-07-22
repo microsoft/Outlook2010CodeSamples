@@ -1,4 +1,4 @@
-#include "mrxp.h"
+#include "stdafx.h"
 
 CXPLogon::CXPLogon(CXPProvider* pProvider, LPMAPISUP pMAPISup, LPALLOCATEBUFFER pAllocBuffer,
 		LPALLOCATEMORE pAllocMore, LPFREEBUFFER pFreeBuffer, ULONG ulProps, LPSPropValue pProps,

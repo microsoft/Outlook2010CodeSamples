@@ -1,4 +1,4 @@
-#include "mrxp.h"
+#include "stdafx.h"
 
 CXPStatus::CXPStatus(CXPLogon* pParent, LPMAPISUP pMAPISup, ULONG cIdentityProps, LPSPropValue pIdentityProps,
 		LPALLOCATEBUFFER pAllocBuffer, LPALLOCATEMORE pAllocMore, LPFREEBUFFER pFreeBuffer)

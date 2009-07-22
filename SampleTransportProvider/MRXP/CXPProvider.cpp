@@ -1,4 +1,4 @@
-#include "mrxp.h"
+#include "stdafx.h"
 
 CXPProvider::CXPProvider(HINSTANCE hInstance)
 {

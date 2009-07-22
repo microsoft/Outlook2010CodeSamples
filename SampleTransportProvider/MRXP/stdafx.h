@@ -32,17 +32,9 @@
 #include <MAPISPI.H>
 #include <MAPIUTIL.H>
 #include <MAPIVAL.H>
-#include <Mapiguid.h>
 #include <WINDOWSX.H>
 
-// C RunTime Header Files
-#include <stdlib.h>
-#include <malloc.h>
-#include <memory.h>
-#include <tchar.h>
-#include <assert.h>
-
 // TODO: reference additional headers your program requires here
-
-// Sample Address Book Provider has no logging yet
-#define Log
+#include "mrxp.h"
+#include "Output.h"
+#include "ImportProcs.h"

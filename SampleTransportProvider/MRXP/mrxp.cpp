@@ -1,4 +1,4 @@
-#include "mrxp.h"
+#include "stdafx.h"
 
 TCHAR szBlank[] = _T("");
 // Static data for the message store provider configuration property sheets

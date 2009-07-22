@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mapi32.lib odbc32.lib odbccp32.lib msi.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib msi.lib"
 				OutputFile="$(OutDir)\wrppst32.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -153,7 +153,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mapi32.lib odbc32.lib odbccp32.lib msi.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib msi.lib"
 				OutputFile="$(OutDir)\wrppst32.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -237,7 +237,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mapi32.lib odbc32.lib odbccp32.lib msi.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib msi.lib"
 				OutputFile="$(OutDir)\wrppst32.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -321,7 +321,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mapi32.lib odbc32.lib odbccp32.lib msi.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib msi.lib"
 				OutputFile="$(OutDir)\wrppst32.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -363,6 +363,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
+			<File
+				RelativePath=".\ImportProcs.cpp"
+				>
+			</File>
 			<File
 				RelativePath="Provider.cpp"
 				>
@@ -514,6 +518,10 @@
 			>
 			<File
 				RelativePath=".\EdkMdb.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ImportProcs.h"
 				>
 			</File>
 			<File
