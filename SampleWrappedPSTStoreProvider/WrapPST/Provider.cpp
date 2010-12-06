@@ -836,7 +836,7 @@ STDMETHODIMP CMSProvider::Shutdown(ULONG * pulFlags)
 //      An HRESULT
 STDMETHODIMP CMSProvider::Logon(
 								LPMAPISUP	  pSupObj,
-								ULONG		  ulUIParam,
+								ULONG_PTR	  ulUIParam,
 								LPTSTR		  pszProfileName,
 								ULONG		  cbEntryID,
 								LPENTRYID	  pEntryID,
@@ -918,7 +918,7 @@ STDMETHODIMP CMSProvider::Logon(
 //      An HRESULT
 //
 STDMETHODIMP CMSProvider::SpoolerLogon (LPMAPISUP	  pSupObj,
-										ULONG		  ulUIParam,
+										ULONG_PTR	  ulUIParam,
 										LPTSTR		  pszProfileName,
 										ULONG		  cbEntryID,
 										LPENTRYID	  pEntryID,
@@ -1296,7 +1296,7 @@ STDMETHODIMP CMsgStore::DeleteProps (LPSPropTagArray	   pPropTagArray,
 STDMETHODIMP CMsgStore::CopyTo (ULONG				  ciidExclude,
 								LPCIID				  rgiidExclude,
 								LPSPropTagArray 	  pExcludeProps,
-								ULONG				  ulUIParam,
+								ULONG_PTR			  ulUIParam,
 								LPMAPIPROGRESS		  pProgress,
 								LPCIID				  pInterface,
 								LPVOID				  pDestObj,
@@ -1334,7 +1334,7 @@ STDMETHODIMP CMsgStore::CopyTo (ULONG				  ciidExclude,
 //      MAPI_E_NO_SUPPORT always
 //
 STDMETHODIMP CMsgStore::CopyProps (LPSPropTagArray		 pIncludeProps,
-								   ULONG				 ulUIParam,
+								   ULONG_PTR			 ulUIParam,
 								   LPMAPIPROGRESS		 pProgress,
 								   LPCIID				 pInterface,
 								   LPVOID				 pDestObj,
@@ -1446,7 +1446,7 @@ STDMETHODIMP CMsgStore::Advise (ULONG			 cbEntryID,
 								LPENTRYID		 pEntryID,
 								ULONG			 ulEventMask,
 								LPMAPIADVISESINK pAdviseSink,
-								ULONG * 		 pulConnection)
+								ULONG_PTR * 	 pulConnection)
 {
 	Log(true,"CMsgStore::Advise\n");
 	HRESULT hRes = S_OK;
@@ -1476,7 +1476,7 @@ STDMETHODIMP CMsgStore::Advise (ULONG			 cbEntryID,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::Unadvise (ULONG ulConnection)
+STDMETHODIMP CMsgStore::Unadvise (ULONG_PTR ulConnection)
 {
 	Log(true,"CMsgStore::Unadvise\n");
 	HRESULT hRes = S_OK;

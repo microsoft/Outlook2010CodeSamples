@@ -54,7 +54,7 @@ public:
 		ULONG                      ulEventMask,
 		ULONG                      ulFlags,
 		LPMAPIADVISESINK           pAdviseSink,
-		ULONG *                    pulConnection)
+		ULONG_PTR *                pulConnection)
 	{
 		return m_pMAPISup->Subscribe(
 			pKey,
@@ -64,7 +64,7 @@ public:
 			pulConnection);
 	}
     inline STDMETHODIMP Unsubscribe
-		(ULONG                      ulConnection)
+		(ULONG_PTR                  ulConnection)
 	{
 		return m_pMAPISup->Unsubscribe(ulConnection);
 	}
@@ -218,7 +218,7 @@ public:
 			ppTable);
 	}
     inline STDMETHODIMP Address
-		(ULONG *                    pulUIParam,
+		(ULONG_PTR *               pulUIParam,
 		LPADRPARM                  pAdrParms,
 		LPADRLIST *                ppAdrList)
 	{
@@ -228,7 +228,7 @@ public:
 			ppAdrList);
 	}
     inline STDMETHODIMP Details
-		(ULONG *                    pulUIParam,
+		(ULONG_PTR *               pulUIParam,
 		LPFNDISMISS                pfnDismiss,
 		LPVOID                     pvDismissContext,
 		ULONG                      cbEntryID,
@@ -250,7 +250,7 @@ public:
 			ulFlags);
 	}
     inline STDMETHODIMP NewEntry
-		(ULONG                      ulUIParam,
+		(ULONG_PTR                 ulUIParam,
 		ULONG                      ulFlags,
 		ULONG                      cbEIDContainer,
 		LPENTRYID                  pEIDContainer,
@@ -270,7 +270,7 @@ public:
 			ppEIDNewEntry);
 	}
     inline STDMETHODIMP DoConfigPropsheet
-		(ULONG                      ulUIParam,
+		(ULONG_PTR                 ulUIParam,
 		ULONG                      ulFlags,
 		LPTSTR                     pszTitle,
 		LPMAPITABLE                pDisplayTable,
@@ -291,7 +291,7 @@ public:
 		LPENTRYLIST                 pMsgList,
 		LPCIID                      pDestInterface,
 		LPVOID                      pDestFolder,
-		ULONG                       ulUIParam,
+		ULONG_PTR                   ulUIParam,
 		LPMAPIPROGRESS              pProgress,
 		ULONG                       ulFlags)
 	{
@@ -313,7 +313,7 @@ public:
 		LPCIID                     pDestInterface,
 		LPVOID                     pDestFolder,
 		LPTSTR                     szNewFolderName,
-		ULONG                      ulUIParam,
+		ULONG_PTR                  ulUIParam,
 		LPMAPIPROGRESS             pProgress,
 		ULONG                      ulFlags)
 	{
@@ -335,7 +335,7 @@ public:
 		ULONG                      ciidExclude,
 		LPCIID                     rgiidExclude,
 		LPSPropTagArray            pExcludeProps,
-		ULONG                      ulUIParam,
+		ULONG_PTR                  ulUIParam,
 		LPMAPIPROGRESS             pProgress,
 		LPCIID                     pDestInterface,
 		LPVOID                     pDestObj,
@@ -359,7 +359,7 @@ public:
 		(LPCIID                     pSrcInterface,
 		LPVOID                     pSrcObj,
 		LPSPropTagArray            pIncludeProps,
-		ULONG                      ulUIParam,
+		ULONG_PTR                  ulUIParam,
 		LPMAPIPROGRESS             pProgress,
 		LPCIID                     pDestInterface,
 		LPVOID                     pDestObj,
@@ -378,7 +378,7 @@ public:
 			ppProblems);
 	}
     inline STDMETHODIMP DoProgressDialog
-		(ULONG                      ulUIParam,
+		(ULONG_PTR                 ulUIParam,
 		ULONG                      ulFlags,
 		LPMAPIPROGRESS *           ppProgress)
 	{
