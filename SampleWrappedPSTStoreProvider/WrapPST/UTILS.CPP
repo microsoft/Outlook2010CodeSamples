@@ -2,10 +2,44 @@
 #include <msi.h>
 #include "ImportProcs.h"
 
+LPTSTR GenerateProviderPath()
+{
+	TCHAR szFilePath[MAX_PATH] = {0};
+	DWORD dwDir = NULL;
+	HMODULE hMod = NULL;
+	hMod = GetModuleHandle("wrppst32.dll");
+	if (hMod)
+	{
+		dwDir = GetModuleFileName(hMod,szFilePath,_countof(szFilePath));
+		TCHAR* szExt = _tcsstr(szFilePath, "32.dll");
+		if (szExt)
+		{
+			StringCchPrintf(szExt, 6, ".dll");
+			size_t cchStr = 0;
+			StringCchLength(szFilePath, MAX_PATH, &cchStr);
+			LPTSTR szPath = new TCHAR[cchStr+1];
+			if (szPath)
+			{
+				StringCchCopy(szPath, cchStr+1, szFilePath);
+				return szPath;
+			}
+		}
+	}
+
+	return NULL;
+}
+
 STDMETHODIMP MergeWithMAPISVC()
 {
 	Log(true,"MergeWithMAPISVC adding wrapped PST\n");
-	return HrSetProfileParameters(aWrapPSTServicesIni);
+	Log(true,"DLL install path is %s\n", aWrapPSTServicesIni[2].lpszValue);
+	LPTSTR szPath = GenerateProviderPath();
+	Log(true,"Better DLL install path is %s\n", szPath);
+	aWrapPSTServicesIni[2].lpszValue = szPath;
+	aWrapPSTServicesIni[9].lpszValue = szPath;
+	HRESULT hRes = HrSetProfileParameters(aWrapPSTServicesIni);
+	delete[] szPath;
+	return hRes;
 }
 
 STDMETHODIMP RemoveFromMAPISVC()

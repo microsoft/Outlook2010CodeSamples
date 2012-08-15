@@ -48,6 +48,7 @@ static SERVICESINIREC aREMOVE_WrapPSTServicesIni[] =
 };
 
 
+LPTSTR GenerateProviderPath();
 STDMETHODIMP MergeWithMAPISVC();
 STDMETHODIMP RemoveFromMAPISVC();
 void GetMAPISVCPath(LPSTR szMAPIDir, ULONG ulMAPIDir);

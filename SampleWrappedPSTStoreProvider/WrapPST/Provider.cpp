@@ -448,10 +448,11 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 				if (SUCCEEDED(hRes) && pStoreEID)
 				{
 					pTemp = MS_DLL_NAME_STRING;
+					LPTSTR szDllPath = GenerateProviderPath();
 
 					hRes = WrapStoreEntryID(
 						0,
-						(LPTSTR)MS_DLL_NAME_STRING,
+						szDllPath,
 						cbStoreEID,
 						(LPENTRYID)pStoreEID,
 						&ulWrapEIDLen,
@@ -502,6 +503,7 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 						// global profile
 						hRes = pProfObj->SetProps (i, rgProps, NULL);
 					}
+					delete[] szDllPath;
 				}
 			}
 		}
