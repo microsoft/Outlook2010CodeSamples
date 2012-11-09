@@ -903,6 +903,7 @@ STDMETHODIMP CMSProvider::Logon(
 
 	*ppMDB = pWrappedMDB;
 
+	if (pMySup) pMySup->Release();
 	if (lpProfSect) lpProfSect->Release();
 
 	return hRes;
