@@ -692,6 +692,8 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 				hRes = lpProfSect->SaveChanges(KEEP_OPEN_READWRITE);
 			}
 		}
+
+		if (pMySup) pMySup->Release();
 	}
 
 	Log(true, "Ran pNSTServiceEntry 0x%08X\n", hRes);
@@ -962,6 +964,9 @@ STDMETHODIMP CMSProvider::SpoolerLogon (LPMAPISUP	  pSupObj,
 			ppMDB);
 	}
 	Log(true,"CMSProvider::SpoolerLogon returned 0x%08X\n", hRes);
+
+	if (pMySup) pMySup->Release();
+	if (lpProfSect) lpProfSect->Release();
 
 	return hRes;
 }
