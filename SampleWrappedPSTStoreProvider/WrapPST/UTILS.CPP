@@ -185,10 +185,11 @@ void GetOutlookVersionString(LPTSTR* lppszPath, LPTSTR* lppszVer, LPTSTR* lppszL
 	if (lpszTempLang) *lpszTempLang = NULL;
 
 	TCHAR pszaOutlookQualifiedComponents[][MAX_PATH] = {
+		_T("{E83B4360-C208-4325-9504-0D23003A74A5}"), // O15_CATEGORY_GUID_CORE_OFFICE (retail)
+		_T("{1E77DE88-BCAB-4C37-B9E5-073AF52DFD7A}")  // O14_CATEGORY_GUID_CORE_OFFICE (retail)
+		_T("{24AAE126-0911-478F-A019-07B875EB9996}"), // O12_CATEGORY_GUID_CORE_OFFICE (retail)
 		_T("{BC174BAD-2F53-4855-A1D5-0D575C19B1EA}"), // O11_CATEGORY_GUID_CORE_OFFICE (retail)
 		_T("{BC174BAD-2F53-4855-A1D5-1D575C19B1EA}"), // O11_CATEGORY_GUID_CORE_OFFICE (debug)
-		_T("{24AAE126-0911-478F-A019-07B875EB9996}"), // O12_CATEGORY_GUID_CORE_OFFICE (retail)
-		_T("{1E77DE88-BCAB-4C37-B9E5-073AF52DFD7A}")  // O14_CATEGORY_GUID_CORE_OFFICE (retail)
 	};
 	int nOutlookQualifiedComponents = sizeof(pszaOutlookQualifiedComponents)/sizeof(TCHAR*);
 	int i = 0;
@@ -199,11 +200,24 @@ void GetOutlookVersionString(LPTSTR* lppszPath, LPTSTR* lppszVer, LPTSTR* lppszL
 	{
 		ret = MsiProvideQualifiedComponent(
 			pszaOutlookQualifiedComponents[i],
-			_T("outlook.exe"),
+			_T("outlook.x64.exe"),
 			(DWORD) INSTALLMODE_DEFAULT,
 			NULL,
 			&dwValueBuf);
-		if (ERROR_SUCCESS == ret) break;
+		if (ERROR_SUCCESS == ret)
+		{
+			break;
+		}
+		else
+		{
+			ret = MsiProvideQualifiedComponent(
+				pszaOutlookQualifiedComponents[i],
+				_T("outlook.exe"),
+				(DWORD) INSTALLMODE_DEFAULT,
+				NULL,
+				&dwValueBuf);
+			if (ERROR_SUCCESS == ret) break;
+		}
 	}
 
 	if (ERROR_SUCCESS == ret)
@@ -215,10 +229,19 @@ void GetOutlookVersionString(LPTSTR* lppszPath, LPTSTR* lppszVer, LPTSTR* lppszL
 		{
 			ret = MsiProvideQualifiedComponent(
 				pszaOutlookQualifiedComponents[i],
-				_T("outlook.exe"),
-				(DWORD) INSTALLMODE_EXISTING,
+				_T("outlook.x64.exe"),
+				(DWORD) INSTALLMODE_DEFAULT,
 				lpszTempPath,
 				&dwValueBuf);
+			if (ERROR_SUCCESS != ret)
+			{
+				ret = MsiProvideQualifiedComponent(
+					pszaOutlookQualifiedComponents[i],
+					_T("outlook.exe"),
+					(DWORD) INSTALLMODE_DEFAULT,
+					lpszTempPath,
+					&dwValueBuf);
+			}
 
 			if (ERROR_SUCCESS == ret)
 			{

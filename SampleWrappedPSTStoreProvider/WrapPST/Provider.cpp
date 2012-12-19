@@ -106,24 +106,25 @@ STDINITMETHODIMP MSProviderInit (
 	g_lpAllocateMore = lpAllocateMore;
 	g_lpFreeBuffer = lpFreeBuffer;
 
-	LPTSTR lpszPath = GetPSTPath();
-	HMODULE hm = NULL;
-	if (lpszPath)
+	HMODULE hm = GetModuleHandle("mspst32.dll");
+	if (!hm)
 	{
-		Log(true, "Got PST path %s\n", lpszPath);
+		LPTSTR lpszPath = GetPSTPath();
+		if (lpszPath)
+		{
+			Log(true, "Got PST path %s\n", lpszPath);
 
-		hm = LoadLibrary(lpszPath);
-		Log(true,"LoadLibrary returned 0x%08X\n", hm);
-		delete[] lpszPath;
+			hm = LoadLibrary(lpszPath);
+			Log(true,"LoadLibrary returned 0x%08X\n", hm);
+			delete[] lpszPath;
+		}
 	}
 
-	LPMSPROVIDERINIT pMsProviderInit = NULL;
-	if (hm)
-	{
-		pMsProviderInit = (LPMSPROVIDERINIT)GetProcAddress(hm, "MSProviderInit");
-		Log(true,"GetProcAddress returned 0x%08X\n", pMsProviderInit);
-	}
-	else hRes = E_OUTOFMEMORY;
+	Log(true, "Got module 0x%08X\n", hm);
+	if (!hm) return E_OUTOFMEMORY;
+
+	LPMSPROVIDERINIT pMsProviderInit = (LPMSPROVIDERINIT)GetProcAddress(hm, "MSProviderInit");
+	Log(true,"GetProcAddress returned 0x%08X\n", pMsProviderInit);
 
 	if (pMsProviderInit)
 	{
@@ -621,14 +622,18 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 	// Get memory routines
 	hRes = lpMAPISup->GetMemAllocRoutines(&g_lpAllocateBuffer,&g_lpAllocateMore,&g_lpFreeBuffer);
 
-	LPTSTR lpszPath = GetPSTPath();
-	HMODULE hm = NULL;
-	if (lpszPath)
+	HMODULE hm = GetModuleHandle("mspst32.dll");
+	if (!hm)
 	{
-		Log(true, "Got PST path %s\n", lpszPath);
+		LPTSTR lpszPath = GetPSTPath();
+		if (lpszPath)
+		{
+			Log(true, "Got PST path %s\n", lpszPath);
 
-		hm = LoadLibrary(lpszPath);
-		delete[] lpszPath;
+			hm = LoadLibrary(lpszPath);
+			Log(true,"LoadLibrary returned 0x%08X\n", hm);
+			delete[] lpszPath;
+		}
 	}
 
 	Log(true, "Got module 0x%08X\n", hm);
