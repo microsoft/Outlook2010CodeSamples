@@ -5,7 +5,7 @@ Documentation for these samples may be found on the [MSDN](http://msdn.microsoft
 
 **Quick Details**
 Date Published: 7/27/2009  
-Source Language: {"C++"}  
+Source Language: C++  
 Supported Development Platform: Microsoft Visual Studio 2008  
 Download Size: 186 KB (compressed) / 731 KB (expanded)  
 Dependencies: These projects are dependent on the [Outlook 2010 MAPI Header Files](http://www.microsoft.com/downloads/details.aspx?FamilyID=f8d01fc8-f7b5-4228-baa3-817488a66db1).
