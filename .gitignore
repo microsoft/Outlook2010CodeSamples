@@ -1,0 +1,20 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Debug
+/SampleAddressBookProvider/SABP/Debug
+/SampleTransportProvider/MRXP/Debug
+/SampleWrappedPSTStoreProvider/WrapPST/.vs
+/SampleWrappedPSTStoreProvider/WrapPST/Debug
+/Release
+/SampleAddressBookProvider/SABP/Release
+/SampleAddressBookProvider/SABP/x64
+/SampleTransportProvider/MRXP/Release
+/SampleTransportProvider/MRXP/Unicode_Debug
+/SampleTransportProvider/MRXP/Unicode_Release
+/SampleTransportProvider/MRXP/x64
+/SampleWrappedPSTStoreProvider/WrapPST/Release
+/SampleWrappedPSTStoreProvider/WrapPST/x64
+/x64

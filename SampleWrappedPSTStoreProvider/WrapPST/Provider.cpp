@@ -2000,7 +2000,7 @@ HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum,DNTBL *pDownTblSync)
 	// information needed from the folder can be accessed by doing something similar
 	{
 		ULONG		ulObjType = NULL;
-		LPMESSAGE	lpMessage = NULL;
+		LPMESSAGE	lpOtherMessage = NULL;
 
 		hRes = lpMDB->OpenEntry(
 			sizeof(FEID),
@@ -2008,13 +2008,13 @@ HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum,DNTBL *pDownTblSync)
 			NULL,
 			NULL,
 			&ulObjType,
-			(LPUNKNOWN*) &lpMessage);
+			(LPUNKNOWN*) &lpOtherMessage);
 		Log(true,"lpMDB->OpenEntry returning 0x%08X\n",hRes);
 
-		if (lpMessage)
+		if (lpOtherMessage)
 		{
 			LPSPropValue lpProp = NULL;
-			hRes = HrGetOneProp(lpMessage,PR_DISPLAY_NAME_A,&lpProp);
+			hRes = HrGetOneProp(lpOtherMessage,PR_DISPLAY_NAME_A,&lpProp);
 			Log(true,"lpMDB->OpenEntry returning 0x%08X\n",hRes);
 
 			if (SUCCEEDED(hRes) &&
@@ -2026,7 +2026,7 @@ HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum,DNTBL *pDownTblSync)
 			}
 
 			MyFreeBuffer(lpProp);
-			lpMessage->Release();
+			lpOtherMessage->Release();
 		}
 
 	}
