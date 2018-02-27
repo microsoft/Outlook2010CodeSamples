@@ -5,45 +5,45 @@ TCHAR szBlank[] = _T("");
 TCHAR szFilter[] = _T("*"); // "*" to allow any character
 
 // Control description structures
-DTBLLABEL DtLabel = {sizeof(DTBLLABEL), fMapiUnicode};
-DTBLPAGE DtPage  = {sizeof(DTBLPAGE), fMapiUnicode};
-DTBLEDIT DtCtlUserName    = {sizeof(DTBLEDIT), fMapiUnicode, _MAX_PATH, PR_PROFILE_USER};
-DTBLEDIT DtCtlInboxPath    = {sizeof(DTBLEDIT), fMapiUnicode, _MAX_PATH, PR_PROFILE_MAILBOX};
+DTBLLABEL DtLabel = { sizeof(DTBLLABEL), fMapiUnicode };
+DTBLPAGE DtPage = { sizeof(DTBLPAGE), fMapiUnicode };
+DTBLEDIT DtCtlUserName = { sizeof(DTBLEDIT), fMapiUnicode, _MAX_PATH, PR_PROFILE_USER };
+DTBLEDIT DtCtlInboxPath = { sizeof(DTBLEDIT), fMapiUnicode, _MAX_PATH, PR_PROFILE_MAILBOX };
 
 // Description table for the controls in the first page
 #define NUMBER_OF_CONTROLS  5
 DTCTL ConfigPage[] =
 {
-    {DTCT_PAGE,    0,						  NULL, 0, NULL,     0,						&DtPage           },
-    {DTCT_EDIT,    DT_REQUIRED | DT_EDITABLE, NULL, 0, szFilter, IDC_EDIT_DISPLAY_NAME, &DtCtlUserName    },
-    {DTCT_EDIT,    DT_REQUIRED | DT_EDITABLE, NULL, 0, szFilter, IDC_EDIT_INBOX,		&DtCtlInboxPath   },
-    {DTCT_LABEL,   0,						  NULL, 0, NULL,     IDC_LBL_DISPLAY_NAME,  &DtLabel          },
-    {DTCT_LABEL,   0,						  NULL, 0, NULL,     IDC_LBL_INBOX,			&DtLabel          },
+	{DTCT_PAGE,    0,						  NULL, 0, NULL,     0,						&DtPage           },
+	{DTCT_EDIT,    DT_REQUIRED | DT_EDITABLE, NULL, 0, szFilter, IDC_EDIT_DISPLAY_NAME, &DtCtlUserName    },
+	{DTCT_EDIT,    DT_REQUIRED | DT_EDITABLE, NULL, 0, szFilter, IDC_EDIT_INBOX,		&DtCtlInboxPath   },
+	{DTCT_LABEL,   0,						  NULL, 0, NULL,     IDC_LBL_DISPLAY_NAME,  &DtLabel          },
+	{DTCT_LABEL,   0,						  NULL, 0, NULL,     IDC_LBL_INBOX,			&DtLabel          },
 };
 
 DTPAGE DtPropPage;
 
 BOOL WINAPI DllMain(HINSTANCE /*hinstDLL*/, DWORD fdwReason, LPVOID /*lpvReserved*/)
 {
-	Log(true, _T("mrxp32.dll in DLLMain, fdwReason = 0x%08X\n"),fdwReason);
+	Log(true, _T("mrxp32.dll in DLLMain, fdwReason = 0x%08X\n"), fdwReason);
 
-    switch(fdwReason)
-    {
-        case DLL_PROCESS_ATTACH:
-            break;
+	switch (fdwReason)
+	{
+	case DLL_PROCESS_ATTACH:
+		break;
 
-        case DLL_THREAD_ATTACH:
-         // Do thread-specific initialization.
-            break;
+	case DLL_THREAD_ATTACH:
+		// Do thread-specific initialization.
+		break;
 
-        case DLL_THREAD_DETACH:
-         // Do thread-specific cleanup.
-            break;
+	case DLL_THREAD_DETACH:
+		// Do thread-specific cleanup.
+		break;
 
-        case DLL_PROCESS_DETACH:
-         // Perform any necessary cleanup.
-            break;
-    }
+	case DLL_PROCESS_DETACH:
+		// Perform any necessary cleanup.
+		break;
+	}
 	return true;
 }
 
@@ -82,7 +82,7 @@ STDINITMETHODIMP XPProviderInit(
 		return MAPI_E_VERSION;
 	}
 
-	CXPProvider* pProvider =NULL;
+	CXPProvider* pProvider = NULL;
 	pProvider = new CXPProvider(hInstance);
 	if (!pProvider)
 	{
@@ -119,17 +119,17 @@ STDINITMETHODIMP XPProviderInit(
 
 ***********************************************************************************************/
 
-HRESULT STDAPICALLTYPE ServiceEntry (
-									 HINSTANCE		hInstance,
-									 LPMALLOC		/*lpMalloc*/,
-									 LPMAPISUP		lpMAPISup,
-									 ULONG			ulUIParam,
-									 ULONG			ulFlags,
-									 ULONG			ulContext,
-									 ULONG			cValues,
-									 LPSPropValue	lpProps,
-									 LPPROVIDERADMIN lpProviderAdmin,
-									 LPMAPIERROR FAR* /*lppMapiError*/)
+HRESULT STDAPICALLTYPE ServiceEntry(
+	HINSTANCE		hInstance,
+	LPMALLOC		/*lpMalloc*/,
+	LPMAPISUP		lpMAPISup,
+	ULONG			ulUIParam,
+	ULONG			ulFlags,
+	ULONG			ulContext,
+	ULONG			cValues,
+	LPSPropValue	lpProps,
+	LPPROVIDERADMIN lpProviderAdmin,
+	LPMAPIERROR FAR* /*lppMapiError*/)
 {
 	Log(true, _T("ServiceEntry function called\n"));
 
@@ -139,15 +139,15 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 	HRESULT hRes = S_OK;
 
 	// "Do-nothing" contexts
-	if (MSG_SERVICE_INSTALL		== ulContext ||
-		MSG_SERVICE_UNINSTALL	== ulContext ||
-		MSG_SERVICE_DELETE		== ulContext)
+	if (MSG_SERVICE_INSTALL == ulContext ||
+		MSG_SERVICE_UNINSTALL == ulContext ||
+		MSG_SERVICE_DELETE == ulContext)
 	{
 		Log(true, _T("ServiceEntry: Do-nothing context: 0x%08X\n"), ulContext);
 		return hRes;
 	}
 	else if (MSG_SERVICE_PROVIDER_CREATE == ulContext ||
-			 MSG_SERVICE_PROVIDER_DELETE == ulContext)
+		MSG_SERVICE_PROVIDER_DELETE == ulContext)
 	{
 		Log(true, _T("ServiceEntry: Unsupported context: 0x%08X\n"), ulContext);
 		return MAPI_E_NO_SUPPORT;
@@ -156,9 +156,9 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 	Log(true, _T("ServiceEntry: Context: 0x%08X\n"), ulContext);
 
 	// Get MAPI alloc routines
-	LPALLOCATEBUFFER pAllocateBuffer     = NULL;  // MAPIAllocateBuffer function
-	LPALLOCATEMORE   pAllocateMore       = NULL;  // MAPIAllocateMore function
-	LPFREEBUFFER     pFreeBuffer         = NULL;  // MAPIFreeBuffer function
+	LPALLOCATEBUFFER pAllocateBuffer = NULL;  // MAPIAllocateBuffer function
+	LPALLOCATEMORE   pAllocateMore = NULL;  // MAPIAllocateMore function
+	LPFREEBUFFER     pFreeBuffer = NULL;  // MAPIFreeBuffer function
 
 	hRes = lpMAPISup->GetMemAllocRoutines(&pAllocateBuffer, &pAllocateMore, &pFreeBuffer);
 	if (FAILED(hRes) || !pAllocateBuffer || !pAllocateMore || !pFreeBuffer)
@@ -194,7 +194,7 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 			{
 				HRESULT hResValidConfig = S_OK;
 
-				hResValidConfig =  ValidateConfigProps(ulProfProps, lpProfProps);
+				hResValidConfig = ValidateConfigProps(ulProfProps, lpProfProps);
 				if ((SERVICE_UI_ALWAYS & ulFlags) ||
 					(SERVICE_UI_ALLOWED & ulFlags && FAILED(hResValidConfig)))
 				{
@@ -250,15 +250,15 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 }
 
 STDMETHODIMP PreprocessMessage(LPVOID					/*lpvSession*/,
-							   LPMESSAGE				/*lpMessage*/,
-							   LPADRBOOK				/*lpAdrBook*/,
-							   LPMAPIFOLDER				/*lpFolder*/,
-							   LPALLOCATEBUFFER			/*AllocateBuffer*/,
-							   LPALLOCATEMORE			/*AllocateMore*/,
-							   LPFREEBUFFER				/*FreeBuffer*/,
-							   ULONG FAR *				/*lpcOutbound*/,
-							   LPMESSAGE FAR * FAR *	/*lpppMessage*/,
-							   LPADRLIST FAR *			/*lppRecipList*/)
+	LPMESSAGE				/*lpMessage*/,
+	LPADRBOOK				/*lpAdrBook*/,
+	LPMAPIFOLDER				/*lpFolder*/,
+	LPALLOCATEBUFFER			/*AllocateBuffer*/,
+	LPALLOCATEMORE			/*AllocateMore*/,
+	LPFREEBUFFER				/*FreeBuffer*/,
+	ULONG FAR *				/*lpcOutbound*/,
+	LPMESSAGE FAR * FAR *	/*lpppMessage*/,
+	LPADRLIST FAR *			/*lppRecipList*/)
 {
 	Log(true, _T("PreprocessMessage function called\n"));
 	return S_OK;
@@ -280,17 +280,18 @@ STDMETHODIMP RemoveFromMAPISVC()
 	return HrSetProfileParameters(aREMOVE_MRXPServicesIni);
 }
 
-HRESULT WINAPI DoConfigDialog (HINSTANCE		hInstance,
-							   ULONG			ulUIParam,
-							   ULONG*			pulProfProps,
-							   LPSPropValue*	ppPropArray,
-							   LPSPropTagArray	pTags,
-							   LPMAPISUP		pSupObj,
-							   ULONG			ulFlags,
-							   LPALLOCATEBUFFER	pAllocateBuffer,
-							   LPALLOCATEMORE	pAllocateMore,
-							   LPFREEBUFFER		pFreeBuffer)
+HRESULT WINAPI DoConfigDialog(HINSTANCE		hInstance,
+	ULONG			ulUIParam,
+	ULONG*			pulProfProps,
+	LPSPropValue*	ppPropArray,
+	LPSPropTagArray	pTags,
+	LPMAPISUP		pSupObj,
+	ULONG			ulFlags,
+	LPALLOCATEBUFFER	pAllocateBuffer,
+	LPALLOCATEMORE	pAllocateMore,
+	LPFREEBUFFER		pFreeBuffer)
 {
+	auto hWnd = (HWND)(static_cast<ULONG_PTR>(ulUIParam));
 	Log(true, _T("DoConfigDialog function called.\n"));
 
 	if (!hInstance || !pulProfProps || !*pulProfProps || !ppPropArray || !pTags || !pSupObj)
@@ -302,7 +303,7 @@ HRESULT WINAPI DoConfigDialog (HINSTANCE		hInstance,
 
 	// Internally, DoConfigPropSheet treats the parameters passed there as an ANSI
 	// string.  Therefore, force ANSI and then cast to LPTSTR
-	char szDialogTitle[128] = {0};
+	char szDialogTitle[128] = { 0 };
 	int iRet = 0;
 
 	iRet = LoadStringA(hInstance, IDS_CONFIGSHEET_TITLE, szDialogTitle, CCH_A(szDialogTitle));
@@ -363,11 +364,11 @@ HRESULT WINAPI DoConfigDialog (HINSTANCE		hInstance,
 							}
 							else
 							{
-								TCHAR szErrCaption[128] = {0};
-								TCHAR szErrMsg[128] = {0};
+								TCHAR szErrCaption[128] = { 0 };
+								TCHAR szErrMsg[128] = { 0 };
 								iRet = LoadString(hInstance, IDS_ERROR_CAPTION, szErrCaption, CCH(szErrCaption));
 								iRet = LoadString(hInstance, IDS_INVALID_CONFIG_ERROR, szErrMsg, CCH(szErrMsg));
-								MessageBox((HWND)ulUIParam, szErrMsg, szErrCaption, MB_OK);
+								MessageBox(hWnd, szErrMsg, szErrCaption, MB_OK);
 							}
 						}
 						else
@@ -439,8 +440,8 @@ HRESULT	ValidateConfigProps(ULONG ulProps, LPSPropValue pProps)
 	hRes = StringCchLengthA(pVal->Value.lpszA, STRSAFE_MAX_CCH, &cchInboxLen);
 	if (SUCCEEDED(hRes) && cchInboxLen)
 	{
-		if (pVal->Value.lpszA[cchInboxLen-1] == _T('\\'))
-			pVal->Value.lpszA[cchInboxLen-1] = _T('\0');
+		if (pVal->Value.lpszA[cchInboxLen - 1] == _T('\\'))
+			pVal->Value.lpszA[cchInboxLen - 1] = _T('\0');
 	}
 
 	// Check that the value of this property is a valid
@@ -449,7 +450,7 @@ HRESULT	ValidateConfigProps(ULONG ulProps, LPSPropValue pProps)
 
 	// FILE_FLAG_BACKUP_SEMANTICS - use this flag when you open
 	// a directory.
-	hInbox = CreateFileA(pVal->Value.lpszA, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
+	hInbox = CreateFileA(pVal->Value.lpszA, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 		NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
 	if (INVALID_HANDLE_VALUE == hInbox)
 	{
@@ -482,7 +483,7 @@ HRESULT OpenProviderProfileSection(LPPROVIDERADMIN lpAdmin, LPPROFSECT* lppProfS
 	hRes = lpAdmin->GetProviderTable(0, &lpProvTable);
 	if (SUCCEEDED(hRes) && lpProvTable)
 	{
-		SPropTagArray sptProvider = {1, {PR_PROVIDER_UID}};
+		SPropTagArray sptProvider = { 1, {PR_PROVIDER_UID} };
 
 		hRes = lpProvTable->SetColumns(&sptProvider, 0);
 		if (SUCCEEDED(hRes))

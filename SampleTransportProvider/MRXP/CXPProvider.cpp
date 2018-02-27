@@ -2,7 +2,7 @@
 
 CXPProvider::CXPProvider(HINSTANCE hInstance)
 {
-	Log(true, _T("CXPProvider object created at address 0x%08x\n"), ULONG(this));
+	Log(true, _T("CXPProvider object created at address 0x%p\n"), this);
 	m_pLogonList = NULL;
 	m_hInstance = hInstance;
 	m_cRef = 1;
@@ -11,7 +11,7 @@ CXPProvider::CXPProvider(HINSTANCE hInstance)
 
 CXPProvider::~CXPProvider()
 {
-	Log(true, _T("CXPProvider object destroyed at address 0x%08x\n"), ULONG(this));
+	Log(true, _T("CXPProvider object destroyed at address 0x%p\n"), this);
 	m_hInstance = NULL;
 	DeleteCriticalSection(&m_csObj);
 }
@@ -90,11 +90,11 @@ STDMETHODIMP CXPProvider::Shutdown(ULONG FAR* /*lpulFlags*/)
 ***********************************************************************************************/
 
 STDMETHODIMP CXPProvider::TransportLogon(LPMAPISUP			lpMAPISup,
-										 ULONG_PTR			/*ulUIParam*/,
-										 LPTSTR				/*lpszProfileName*/,
-										 ULONG FAR*			lpulFlags,
-										 LPMAPIERROR FAR*	/*lppMAPIError*/,
-										 LPXPLOGON FAR*		lppXPLogon)
+	ULONG_PTR			/*ulUIParam*/,
+	LPTSTR				/*lpszProfileName*/,
+	ULONG FAR*			lpulFlags,
+	LPMAPIERROR FAR*	/*lppMAPIError*/,
+	LPXPLOGON FAR*		lppXPLogon)
 {
 	Log(true, _T("CXPProvider::TransportLogon function called\n"));
 
@@ -143,7 +143,7 @@ STDMETHODIMP CXPProvider::TransportLogon(LPMAPISUP			lpMAPISup,
 						hRes = MAPI_E_NOT_ENOUGH_MEMORY;
 					}
 
-					if(SUCCEEDED(hRes))
+					if (SUCCEEDED(hRes))
 					{
 						if (*lpulFlags & LOGON_NO_CONNECT)
 						{

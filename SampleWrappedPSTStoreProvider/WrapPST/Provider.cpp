@@ -37,8 +37,8 @@ LTID	ltidZero = { { 0, 0, 0, {0,0,0,0,0,0,0,0} }, { 0,0,0,0,0,0 }, {0} };
 
 // UID of an NST provider - do not change this
 const MAPIUID g_muidProvPrvNST =
-	{ 0xE9, 0x2F, 0xEB, 0x75, 0x96, 0x50, 0x44, 0x86,
-	  0x83, 0xB8, 0x7D, 0xE5, 0x22, 0xAA, 0x49, 0x48 };
+{ 0xE9, 0x2F, 0xEB, 0x75, 0x96, 0x50, 0x44, 0x86,
+  0x83, 0xB8, 0x7D, 0xE5, 0x22, 0xAA, 0x49, 0x48 };
 
 #define MS_DLL_NAME_STRING	  "wrppst.dll"
 #define PROFILE_USER_STRING "My PR_PROFILE_USER"
@@ -48,47 +48,47 @@ LPALLOCATEMORE g_lpAllocateMore = NULL;
 LPFREEBUFFER g_lpFreeBuffer = NULL;
 
 SCODE STDMETHODCALLTYPE MyAllocateBuffer(
-										 ULONG			cbSize,
-										 LPVOID FAR *	lppBuffer)
+	ULONG			cbSize,
+	LPVOID FAR *	lppBuffer)
 {
-	if (g_lpAllocateBuffer) return g_lpAllocateBuffer(cbSize,lppBuffer);
+	if (g_lpAllocateBuffer) return g_lpAllocateBuffer(cbSize, lppBuffer);
 
 	Log(true, "MyAllocateBuffer: g_lpAllocateBuffer not set!\n");
 	return MAPI_E_INVALID_PARAMETER;
 }
 
 SCODE STDMETHODCALLTYPE MyAllocateMore(
-									   ULONG			cbSize,
-									   LPVOID			lpObject,
-									   LPVOID FAR * lppBuffer)
+	ULONG			cbSize,
+	LPVOID			lpObject,
+	LPVOID FAR * lppBuffer)
 {
-	if (g_lpAllocateMore) return g_lpAllocateMore(cbSize,lpObject,lppBuffer);
+	if (g_lpAllocateMore) return g_lpAllocateMore(cbSize, lpObject, lppBuffer);
 
 	Log(true, "MyAllocateMore: g_lpAllocateMore not set!\n");
 	return MAPI_E_INVALID_PARAMETER;
 }
 
 ULONG STDAPICALLTYPE MyFreeBuffer(
-								  LPVOID			lpBuffer)
+	LPVOID			lpBuffer)
 {
 	if (g_lpFreeBuffer) return g_lpFreeBuffer(lpBuffer);
 
 	Log(true, "MyFreeBuffer: g_lpFreeBuffer not set!\n");
-	return (ULONG) MAPI_E_INVALID_PARAMETER;
+	return (ULONG)MAPI_E_INVALID_PARAMETER;
 }
 
-STDINITMETHODIMP MSProviderInit (
-								 HINSTANCE				/*hInstance*/,
-								 LPMALLOC				lpMalloc,
-								 LPALLOCATEBUFFER		lpAllocateBuffer,
-								 LPALLOCATEMORE			lpAllocateMore,
-								 LPFREEBUFFER			lpFreeBuffer,
-								 ULONG					ulFlags,
-								 ULONG					ulMAPIVer,
-								 ULONG FAR *			lpulProviderVer,
-								 LPMSPROVIDER FAR *		lppMSProvider)
+STDINITMETHODIMP MSProviderInit(
+	HINSTANCE				/*hInstance*/,
+	LPMALLOC				lpMalloc,
+	LPALLOCATEBUFFER		lpAllocateBuffer,
+	LPALLOCATEMORE			lpAllocateMore,
+	LPFREEBUFFER			lpFreeBuffer,
+	ULONG					ulFlags,
+	ULONG					ulMAPIVer,
+	ULONG FAR *			lpulProviderVer,
+	LPMSPROVIDER FAR *		lppMSProvider)
 {
-	Log(true,"MSProviderInit function called\n");
+	Log(true, "MSProviderInit function called\n");
 	if (!lppMSProvider || !lpulProviderVer) return MAPI_E_INVALID_PARAMETER;
 
 	HRESULT hRes = S_OK;
@@ -97,11 +97,11 @@ STDINITMETHODIMP MSProviderInit (
 	*lpulProviderVer = CURRENT_SPI_VERSION;
 	if (ulMAPIVer < CURRENT_SPI_VERSION)
 	{
-		Log(true,"MSProviderInit: The version of the subsystem cannot handle this version of the provider\n");
+		Log(true, "MSProviderInit: The version of the subsystem cannot handle this version of the provider\n");
 		return MAPI_E_VERSION;
 	}
 
-	Log(true,"MSProviderInit: saving off memory management routines\n");
+	Log(true, "MSProviderInit: saving off memory management routines\n");
 	g_lpAllocateBuffer = lpAllocateBuffer;
 	g_lpAllocateMore = lpAllocateMore;
 	g_lpFreeBuffer = lpFreeBuffer;
@@ -115,7 +115,7 @@ STDINITMETHODIMP MSProviderInit (
 			Log(true, "Got PST path %s\n", lpszPath);
 
 			hm = LoadLibrary(lpszPath);
-			Log(true,"LoadLibrary returned 0x%08X\n", hm);
+			Log(true, "LoadLibrary returned 0x%08X\n", hm);
 			delete[] lpszPath;
 		}
 	}
@@ -124,11 +124,11 @@ STDINITMETHODIMP MSProviderInit (
 	if (!hm) return E_OUTOFMEMORY;
 
 	LPMSPROVIDERINIT pMsProviderInit = (LPMSPROVIDERINIT)GetProcAddress(hm, "MSProviderInit");
-	Log(true,"GetProcAddress returned 0x%08X\n", pMsProviderInit);
+	Log(true, "GetProcAddress returned 0x%08X\n", pMsProviderInit);
 
 	if (pMsProviderInit)
 	{
-		Log(true,"Calling pMsProviderInit\n");
+		Log(true, "Calling pMsProviderInit\n");
 		CMSProvider* pWrappedProvider = NULL;
 		LPMSPROVIDER pSyncProviderObj = NULL;
 
@@ -142,15 +142,15 @@ STDINITMETHODIMP MSProviderInit (
 			ulMAPIVer,
 			lpulProviderVer,
 			&pSyncProviderObj
-			);
+		);
 
-		Log(true,"pMsProviderInit returned 0x%08X\n", hRes);
+		Log(true, "pMsProviderInit returned 0x%08X\n", hRes);
 		if (SUCCEEDED(hRes))
 		{
-			pWrappedProvider = new CMSProvider (pSyncProviderObj);
+			pWrappedProvider = new CMSProvider(pSyncProviderObj);
 			if (NULL == pWrappedProvider)
 			{
-				Log(true,"MSProviderInit: Failed to allocate new CMSProvider object\n");
+				Log(true, "MSProviderInit: Failed to allocate new CMSProvider object\n");
 				hRes = E_OUTOFMEMORY;
 			}
 
@@ -164,9 +164,9 @@ STDINITMETHODIMP MSProviderInit (
 }
 
 STDMETHODIMP GetGlobalProfileObject(LPMAPISUP	   lpMAPISupObj,
-									LPPROFSECT*    lppGlobalProfileObj)
+	LPPROFSECT*    lppGlobalProfileObj)
 {
-	Log(true,"GetGlobalProfileObject\n");
+	Log(true, "GetGlobalProfileObject\n");
 	if (!lpMAPISupObj || !lppGlobalProfileObj) return MAPI_E_INVALID_PARAMETER;
 
 	HRESULT 	 hRes = S_OK;
@@ -178,12 +178,12 @@ STDMETHODIMP GetGlobalProfileObject(LPMAPISUP	   lpMAPISupObj,
 
 	// Get information for the provider's profile section
 	hRes = lpMAPISupObj->OpenProfileSection(
-		(LPMAPIUID) NULL,
+		(LPMAPIUID)NULL,
 		MAPI_MODIFY,
 		&lpProfileObj);
 	if (FAILED(hRes))
 	{
-		Log(true,"GetProfileProps: OpenProfileSection(NULL) failed\n");
+		Log(true, "GetProfileProps: OpenProfileSection(NULL) failed\n");
 	}
 
 	if (lpProfileObj)
@@ -193,7 +193,7 @@ STDMETHODIMP GetGlobalProfileObject(LPMAPISUP	   lpMAPISupObj,
 		{
 			if (hRes == MAPI_E_NOT_FOUND)
 			{
-				Log(true,"GetProfileProps: Returning OpenProfileSection(NULL)\n");
+				Log(true, "GetProfileProps: Returning OpenProfileSection(NULL)\n");
 				// this is itself the global profile section
 				*lppGlobalProfileObj = lpProfileObj;
 				lpProfileObj = NULL;
@@ -201,23 +201,23 @@ STDMETHODIMP GetGlobalProfileObject(LPMAPISUP	   lpMAPISupObj,
 			}
 			else
 			{
-				Log(true,"GetProfileProps: Failed to get PR_SERVICE_UID\n");
+				Log(true, "GetProfileProps: Failed to get PR_SERVICE_UID\n");
 			}
 		}
 		else if (lpServiceUIDProp && PR_SERVICE_UID == lpServiceUIDProp->ulPropTag)
 		{
-			Log(true,"GetProfileProps: Got PR_SERVICE_UID\n");
+			Log(true, "GetProfileProps: Got PR_SERVICE_UID\n");
 			hRes = lpMAPISupObj->OpenProfileSection(
-				(LPMAPIUID) lpServiceUIDProp->Value.bin.lpb,
+				(LPMAPIUID)lpServiceUIDProp->Value.bin.lpb,
 				MAPI_MODIFY,
 				&lpGlobalProfileObj);
 			if (FAILED(hRes))
 			{
-				Log(true,"GetProfileProps: OpenProfileSection failed to open global profile section\n");
+				Log(true, "GetProfileProps: OpenProfileSection failed to open global profile section\n");
 			}
 			else
 			{
-				Log(true,"GetProfileProps: returning section pointed to by PR_SERVICE_UID\n");
+				Log(true, "GetProfileProps: returning section pointed to by PR_SERVICE_UID\n");
 				*lppGlobalProfileObj = lpGlobalProfileObj;
 				lpGlobalProfileObj = NULL;
 			}
@@ -227,13 +227,13 @@ STDMETHODIMP GetGlobalProfileObject(LPMAPISUP	   lpMAPISupObj,
 
 	if (lpProfileObj) lpProfileObj->Release();
 	if (lpGlobalProfileObj) lpGlobalProfileObj->Release();
-	Log(true,"GetGlobalProfileObject returned 0x%08X\n",hRes);
+	Log(true, "GetGlobalProfileObject returned 0x%08X\n", hRes);
 	return hRes;
 } // GetGlobalProfileObject
 
-HRESULT SetOfflineStoreProps(LPPROFSECT lpProfSect,ULONG ulUIParam)
+HRESULT SetOfflineStoreProps(LPPROFSECT lpProfSect, HWND ulUIParam)
 {
-	Log(true,"SetOfflineStoreProps\n");
+	Log(true, "SetOfflineStoreProps\n");
 	if (!lpProfSect) return MAPI_E_INVALID_PARAMETER;
 
 	HRESULT 		hRes = S_OK;
@@ -243,19 +243,19 @@ HRESULT SetOfflineStoreProps(LPPROFSECT lpProfSect,ULONG ulUIParam)
 
 	// See what props there are
 	hRes = lpProfSect->GetProps((LPSPropTagArray)&sptClientProps,
-								fMapiUnicode,
-								&ulProfProps,
-								&lpProfProps);
+		fMapiUnicode,
+		&ulProfProps,
+		&lpProfProps);
 	if (SUCCEEDED(hRes) && lpProfProps && NUM_CLIENT_PROPERTIES == ulProfProps)
 	{
 		// If there isn't a path to the NST set, go get one
 		if (sptClientProps.aulPropTag[CLIENT_PST_PATH] != lpProfProps[CLIENT_PST_PATH].ulPropTag)
 		{
 			BOOL bRet = false;
-			OPENFILENAME OpenFile = {0};
+			OPENFILENAME OpenFile = { 0 };
 
-			lpszNSTFilePath = new TCHAR[MAX_PATH+1];
-			memset(lpszNSTFilePath, 0, MAX_PATH+1 * sizeof(TCHAR));
+			lpszNSTFilePath = new TCHAR[MAX_PATH + 1];
+			memset(lpszNSTFilePath, 0, MAX_PATH + 1 * sizeof(TCHAR));
 
 			OpenFile.lStructSize = sizeof(OPENFILENAME);
 			OpenFile.lpstrFilter = _T("Wrapped PST Offline Store (*.NST)\0*.NST\0\0");
@@ -265,7 +265,7 @@ HRESULT SetOfflineStoreProps(LPPROFSECT lpProfSect,ULONG ulUIParam)
 			OpenFile.lpstrDefExt = "NST";
 			OpenFile.lpstrFile = lpszNSTFilePath;
 			OpenFile.nMaxFile = MAX_PATH;
-			OpenFile.hwndOwner = (HWND)ulUIParam;
+			OpenFile.hwndOwner = ulUIParam;
 
 			bRet = GetOpenFileName(&OpenFile);
 
@@ -288,7 +288,7 @@ HRESULT SetOfflineStoreProps(LPPROFSECT lpProfSect,ULONG ulUIParam)
 
 	if (SUCCEEDED(hRes))
 	{
-		hRes = lpProfSect->SetProps(ulProfProps,lpProfProps,NULL);
+		hRes = lpProfSect->SetProps(ulProfProps, lpProfProps, NULL);
 
 		if (SUCCEEDED(hRes))
 		{
@@ -304,8 +304,8 @@ HRESULT SetOfflineStoreProps(LPPROFSECT lpProfSect,ULONG ulUIParam)
 
 HRESULT GetSourceKey(SKEY* lpSKEY, BYTE docId, BYTE versionId)
 {
-	memset((void *) lpSKEY, 0x0, sizeof(SKEY));
-	memcpy((void *) lpSKEY, (void *) &g_muidProvPrvNST, sizeof(GUID));
+	memset((void *)lpSKEY, 0x0, sizeof(SKEY));
+	memcpy((void *)lpSKEY, (void *)&g_muidProvPrvNST, sizeof(GUID));
 	lpSKEY->globcnt[0] = docId;
 	lpSKEY->globcnt[1] = versionId;
 
@@ -313,27 +313,27 @@ HRESULT GetSourceKey(SKEY* lpSKEY, BYTE docId, BYTE versionId)
 }
 
 STDMETHODIMP CreateMsgEntryID(BYTE   MsgID,
-							  ULONG  cbParentEntryID,
-							  FEID*  pParentEntryID,
-							  MEID** ppMsgEID,
-							  ULONG* pcbMsgEID)
+	ULONG  cbParentEntryID,
+	FEID*  pParentEntryID,
+	MEID** ppMsgEID,
+	ULONG* pcbMsgEID)
 {
-    Log(true,"CreateMsgEntryID\n");
-    HRESULT hRes = S_OK;
-    MEID* pMsgEID = NULL;
+	Log(true, "CreateMsgEntryID\n");
+	HRESULT hRes = S_OK;
+	MEID* pMsgEID = NULL;
 
-    *ppMsgEID = 0;
-    *pcbMsgEID = NULL;
+	*ppMsgEID = 0;
+	*pcbMsgEID = NULL;
 	hRes = MyAllocateBuffer(sizeof(MEID), (LPVOID *)&pMsgEID);
 
 	if (pMsgEID)
 	{
 		memset(pMsgEID, 0x0, sizeof(MEID));
-		SKEY sKey = {0};
+		SKEY sKey = { 0 };
 
-		GetSourceKey(&sKey,7,MsgID);
+		GetSourceKey(&sKey, 7, MsgID);
 
-		memcpy((void *)(pMsgEID) , (void *) pParentEntryID, cbParentEntryID);
+		memcpy((void *)(pMsgEID), (void *)pParentEntryID, cbParentEntryID);
 		// LTIDMsg
 		memcpy((void *)&pMsgEID->ltidMsg, (void *)&sKey, sizeof(sKey));
 
@@ -342,29 +342,29 @@ STDMETHODIMP CreateMsgEntryID(BYTE   MsgID,
 		pMsgEID = NULL;
 	}
 
-    MyFreeBuffer(pMsgEID);
-	Log(true,"CreateMsgEntryID returning 0x%08X\n",hRes);
-    return hRes;
+	MyFreeBuffer(pMsgEID);
+	Log(true, "CreateMsgEntryID returning 0x%08X\n", hRes);
+	return hRes;
 }
 
 STDMETHODIMP CreateStoreEntryID(
-								LPSTR lpstrPath,
-								BYTE **ppStoreEID,
-								ULONG *pcbStoreEID)
+	LPSTR lpstrPath,
+	BYTE **ppStoreEID,
+	ULONG *pcbStoreEID)
 {
-	Log(true,"CreateStoreEntryID\n");
+	Log(true, "CreateStoreEntryID\n");
 	HRESULT hRes = S_OK;
 	BYTE * pStoreEID = NULL;
-	ULONG cbStoreEID= 0;
+	ULONG cbStoreEID = 0;
 
-	cbStoreEID = 4 + 16 + 1 + (ULONG) strlen(lpstrPath) + 1;
+	cbStoreEID = 4 + 16 + 1 + (ULONG)strlen(lpstrPath) + 1;
 	hRes = MyAllocateBuffer(cbStoreEID, (LPVOID *)&pStoreEID);
 
 	if (SUCCEEDED(hRes))
 	{
-		memset((void *) pStoreEID, 0x0, cbStoreEID);
-		memcpy((void *)(pStoreEID+4), (void *) &g_muidProvPrvNST, 16);
-		hRes = StringCbCopy((char *)(pStoreEID + 21),cbStoreEID-21, lpstrPath);
+		memset((void *)pStoreEID, 0x0, cbStoreEID);
+		memcpy((void *)(pStoreEID + 4), (void *)&g_muidProvPrvNST, 16);
+		hRes = StringCbCopy((char *)(pStoreEID + 21), cbStoreEID - 21, lpstrPath);
 
 		*ppStoreEID = pStoreEID;
 		*pcbStoreEID = cbStoreEID;
@@ -372,23 +372,23 @@ STDMETHODIMP CreateStoreEntryID(
 	}
 
 	MyFreeBuffer(pStoreEID);
-	Log(true,"CreateStoreEntryID returning 0x%08X\n",hRes);
+	Log(true, "CreateStoreEntryID returning 0x%08X\n", hRes);
 	return hRes;
 }
 
-HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
-							   LPPROFSECT pProfObj,
-							   LPPROVIDERADMIN pAdminProvObj)
+HRESULT WINAPI InitStoreProps(LPMAPISUP pSupObj,
+	LPPROFSECT pProfObj,
+	LPPROVIDERADMIN pAdminProvObj)
 {
-	Log(true,"InitStoreProps begin\n");
+	Log(true, "InitStoreProps begin\n");
 	if (!pSupObj || !pProfObj || !pAdminProvObj) return MAPI_E_INVALID_PARAMETER;
 
 	HRESULT      hRes = S_OK;
 	ULONG        i = 0;
 	LPPROFSECT   pProfObjStore = NULL;
-	SPropValue   rgProps[10] = {0};
-	MAPIUID      uidResource = {0};
-	MAPIUID      uidService = {0};
+	SPropValue   rgProps[10] = { 0 };
+	MAPIUID      uidResource = { 0 };
+	MAPIUID      uidService = { 0 };
 	LPSPropValue lprop = NULL;
 	LPSPropValue lpropServiceUID = NULL;
 	LPENTRYID    pWrapEID = NULL;
@@ -396,14 +396,14 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 	ULONG        ulVal = 0;
 	LPVOID       pTemp = NULL;
 	BYTE*        pStoreEID = NULL;
-	ULONG        cbStoreEID= 0;
+	ULONG        cbStoreEID = 0;
 
 	enum
 	{
 		_tag_PR_PROFILE_OFFLINE_STORE_PATH = 0,
-			_tag_PR_STORE_PROVIDERS,
-			_tag_PR_ENTRYID,
-			NUM_TAGA
+		_tag_PR_STORE_PROVIDERS,
+		_tag_PR_ENTRYID,
+		NUM_TAGA
 	};
 
 	const static SizedSPropTagArray(NUM_TAGA, sptTaga) =
@@ -416,7 +416,7 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 		}
 	};
 
-	SizedSPropTagArray (1, tagaServiceUID) =
+	SizedSPropTagArray(1, tagaServiceUID) =
 	{
 		1,
 		{
@@ -424,19 +424,19 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 		}
 	};
 
-	hRes = pProfObj->GetProps((LPSPropTagArray) &sptTaga, 0, &ulVal, & lprop);
+	hRes = pProfObj->GetProps((LPSPropTagArray)&sptTaga, 0, &ulVal, &lprop);
 	if (FAILED(hRes)) return hRes;
 
 	// opening profile section for message store
 	if (lprop[_tag_PR_STORE_PROVIDERS].ulPropTag == PR_STORE_PROVIDERS &&
 		lprop[_tag_PR_ENTRYID].ulPropTag != PR_ENTRYID) // no need to go further if there is an entry ID here
 	{
-		hRes = pAdminProvObj->OpenProfileSection((LPMAPIUID) lprop[_tag_PR_STORE_PROVIDERS].Value.bin.lpb,
+		hRes = pAdminProvObj->OpenProfileSection((LPMAPIUID)lprop[_tag_PR_STORE_PROVIDERS].Value.bin.lpb,
 			NULL, MAPI_MODIFY, &pProfObjStore);
 
 		if (SUCCEEDED(hRes) && pProfObjStore)
 		{
-			hRes = pProfObjStore->GetProps((LPSPropTagArray) &tagaServiceUID, 0, &ulVal, &lpropServiceUID);
+			hRes = pProfObjStore->GetProps((LPSPropTagArray)&tagaServiceUID, 0, &ulVal, &lpropServiceUID);
 
 			if (lpropServiceUID->Value.bin.cb == sizeof(MAPIUID))
 			{
@@ -460,7 +460,7 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 						&pWrapEID);
 					if (S_OK == hRes)
 					{
-						hRes = pSupObj->NewUID (&uidResource);
+						hRes = pSupObj->NewUID(&uidResource);
 
 						rgProps[i].ulPropTag = PR_ENTRYID;
 						rgProps[i].Value.bin.cb = ulWrapEIDLen;
@@ -500,9 +500,9 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 						rgProps[i++].Value.lpszA = lprop[_tag_PR_PROFILE_OFFLINE_STORE_PATH].Value.lpszA;
 
 						// Store's profile
-						hRes = pProfObjStore->SetProps (i, rgProps, NULL);
+						hRes = pProfObjStore->SetProps(i, rgProps, NULL);
 						// global profile
-						hRes = pProfObj->SetProps (i, rgProps, NULL);
+						hRes = pProfObj->SetProps(i, rgProps, NULL);
 					}
 					delete[] szDllPath;
 				}
@@ -515,7 +515,7 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 	MyFreeBuffer(lprop);
 	MyFreeBuffer(lpropServiceUID);
 	MyFreeBuffer(pWrapEID);
-	Log(true,"InitStoreProps end\n");
+	Log(true, "InitStoreProps end\n");
 	return hRes;
 } // InitStoreProps
 
@@ -528,14 +528,14 @@ HRESULT WINAPI InitStoreProps (LPMAPISUP pSupObj,
 // This function should be called quite often.
 HRESULT SetOLFIInOST(LPMDB lpMDB)
 {
-	Log(true,"SetOLFIInOST\n");
+	Log(true, "SetOLFIInOST\n");
 	if (!lpMDB) return MAPI_E_INVALID_PARAMETER;
 
 	HRESULT			hRes = S_OK;
-	OLFI			olfi = {0};
-	SPropValue		sval	= {0};
-	LPSPropValue	pval	= NULL;
-	BOOL			fDirty	= FALSE;
+	OLFI			olfi = { 0 };
+	SPropValue		sval = { 0 };
+	LPSPropValue	pval = NULL;
+	BOOL			fDirty = FALSE;
 
 	hRes = HrGetOneProp((LPMAPIPROP)lpMDB, PR_OST_OLFI, &pval);
 	if ((S_OK == hRes) || (MAPI_E_NOT_FOUND == hRes))
@@ -558,60 +558,61 @@ HRESULT SetOLFIInOST(LPMDB lpMDB)
 			olfi.dwAlloc = GLOB_COUNT_RANGE;
 			fDirty = TRUE;
 
-			Log(true,"SetOLFIInOST: Updated primary range of EntryIDs");
+			Log(true, "SetOLFIInOST: Updated primary range of EntryIDs");
 		}
 
 		// If a good portion of the primary range is used, allocate
 		// a secondary range
-		if (	(olfi.dwAlloc < (GLOB_COUNT_RANGE / 2))
-			&&	(FEqLtid(&olfi.ltidNextAlloc, &ltidZero)))
+		if ((olfi.dwAlloc < (GLOB_COUNT_RANGE / 2))
+			&& (FEqLtid(&olfi.ltidNextAlloc, &ltidZero)))
 		{
 			hRes = CoCreateGuid(&olfi.ltidNextAlloc.guid);
 
 			olfi.dwNextAlloc = GLOB_COUNT_RANGE;
 			fDirty = TRUE;
 
-			Log(true,"SetOLFIInOST: Updated secondary range of EntryIDs");
+			Log(true, "SetOLFIInOST: Updated secondary range of EntryIDs");
 		}
 		if (fDirty)
 		{
-			Log(true,"SetOLFIInOST writing new/updated OLFI\n",hRes);
-			sval.ulPropTag		= PR_OST_OLFI;
-			sval.Value.bin.cb	= sizeof(OLFI);
-			sval.Value.bin.lpb	= (LPBYTE)&olfi;
+			Log(true, "SetOLFIInOST writing new/updated OLFI\n", hRes);
+			sval.ulPropTag = PR_OST_OLFI;
+			sval.Value.bin.cb = sizeof(OLFI);
+			sval.Value.bin.lpb = (LPBYTE)&olfi;
 
 			hRes = HrSetOneProp((LPMAPIPROP)lpMDB, &sval);
 		}
 		MAPIFreeBuffer(pval);
 	}
 
-	Log(true,"SetOLFIInOST returning 0x%08X\n",hRes);
+	Log(true, "SetOLFIInOST returning 0x%08X\n", hRes);
 	return hRes;
 }
 
-HRESULT STDAPICALLTYPE ServiceEntry (
-									 HINSTANCE		/*hInstance*/,
-									 LPMALLOC		lpMalloc,
-									 LPMAPISUP		lpMAPISup,
-									 ULONG			ulUIParam,
-									 ULONG			ulFlags,
-									 ULONG			ulContext,
-									 ULONG			cValues,
-									 LPSPropValue	lpProps,
-									 LPPROVIDERADMIN lpProviderAdmin,
-									 LPMAPIERROR FAR *lppMapiError)
+HRESULT STDAPICALLTYPE ServiceEntry(
+	HINSTANCE		/*hInstance*/,
+	LPMALLOC		lpMalloc,
+	LPMAPISUP		lpMAPISup,
+	ULONG			ulUIParam,
+	ULONG			ulFlags,
+	ULONG			ulContext,
+	ULONG			cValues,
+	LPSPropValue	lpProps,
+	LPPROVIDERADMIN lpProviderAdmin,
+	LPMAPIERROR FAR *lppMapiError)
 {
+	auto hWnd = (HWND)(static_cast<ULONG_PTR>(ulUIParam));
 	// In a real world implementation, an LPMAPIERROR structure should be returned on any error
 	if (!lpMAPISup || !lpProviderAdmin) return MAPI_E_INVALID_PARAMETER;
 	HRESULT hRes = S_OK;
 
-	Log(true,"ServiceEntry function called\n");
-	Log(true,"About to call NSTServiceEntry\n");
+	Log(true, "ServiceEntry function called\n");
+	Log(true, "About to call NSTServiceEntry\n");
 
 	// These contexts are not handled
-	if (MSG_SERVICE_INSTALL 		== ulContext ||
-		MSG_SERVICE_DELETE			== ulContext ||
-		MSG_SERVICE_UNINSTALL		== ulContext ||
+	if (MSG_SERVICE_INSTALL == ulContext ||
+		MSG_SERVICE_DELETE == ulContext ||
+		MSG_SERVICE_UNINSTALL == ulContext ||
 		MSG_SERVICE_PROVIDER_CREATE == ulContext ||
 		MSG_SERVICE_PROVIDER_DELETE == ulContext)
 	{
@@ -620,7 +621,7 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 	}
 
 	// Get memory routines
-	hRes = lpMAPISup->GetMemAllocRoutines(&g_lpAllocateBuffer,&g_lpAllocateMore,&g_lpFreeBuffer);
+	hRes = lpMAPISup->GetMemAllocRoutines(&g_lpAllocateBuffer, &g_lpAllocateMore, &g_lpFreeBuffer);
 
 	HMODULE hm = GetModuleHandle("mspst32.dll");
 	if (!hm)
@@ -631,7 +632,7 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 			Log(true, "Got PST path %s\n", lpszPath);
 
 			hm = LoadLibrary(lpszPath);
-			Log(true,"LoadLibrary returned 0x%08X\n", hm);
+			Log(true, "LoadLibrary returned 0x%08X\n", hm);
 			delete[] lpszPath;
 		}
 	}
@@ -645,32 +646,32 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 
 	// Get profile section
 	LPPROFSECT lpProfSect = NULL;
-	hRes = lpProviderAdmin->OpenProfileSection((LPMAPIUID) NULL, NULL, MAPI_MODIFY, &lpProfSect);
+	hRes = lpProviderAdmin->OpenProfileSection((LPMAPIUID)NULL, NULL, MAPI_MODIFY, &lpProfSect);
 
 	// Set passed in props into the profile
 	if (lpProps && cValues)
 	{
-		hRes = lpProfSect->SetProps(cValues,lpProps,NULL);
+		hRes = lpProfSect->SetProps(cValues, lpProps, NULL);
 	}
 
 	// Make sure there is a store path set
-	if (SUCCEEDED(hRes)) hRes = SetOfflineStoreProps(lpProfSect,ulUIParam);
+	if (SUCCEEDED(hRes)) hRes = SetOfflineStoreProps(lpProfSect, hWnd);
 
 	ULONG			ulProfProps = 0;
 	LPSPropValue	lpProfProps = NULL;
 
 	// Now see what props there are
 	hRes = lpProfSect->GetProps((LPSPropTagArray)&sptClientProps,
-								fMapiUnicode,
-								&ulProfProps,
-								&lpProfProps);
+		fMapiUnicode,
+		&ulProfProps,
+		&lpProfProps);
 	if (SUCCEEDED(hRes))
 	{
 		CSupport * pMySup = NULL;
 		pMySup = new CSupport(lpMAPISup, lpProfSect);
 		if (!pMySup)
 		{
-			Log(true,"MSProviderInit: Failed to allocate new CSupport object\n");
+			Log(true, "MSProviderInit: Failed to allocate new CSupport object\n");
 			hRes = E_OUTOFMEMORY;
 		}
 		if (SUCCEEDED(hRes))
@@ -722,9 +723,9 @@ HRESULT STDAPICALLTYPE ServiceEntry (
 //    Return Value
 //      None
 //
-CMSProvider::CMSProvider (LPMSPROVIDER pPSTMSfwd)
+CMSProvider::CMSProvider(LPMSPROVIDER pPSTMSfwd)
 {
-	Log(true,"In Constructor of CMSProvider\n");
+	Log(true, "In Constructor of CMSProvider\n");
 
 	m_pPSTMS = pPSTMSfwd;
 	m_cRef = 1;
@@ -744,7 +745,7 @@ CMSProvider::CMSProvider (LPMSPROVIDER pPSTMSfwd)
 //
 CMSProvider::~CMSProvider()
 {
-	Log(true,"In Destructor of CMSProvider\n");
+	Log(true, "In Destructor of CMSProvider\n");
 } // CMSProvider::~CMSProvider
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -767,7 +768,7 @@ STDMETHODIMP CMSProvider::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	*ppvObj = NULL;
 	// If the interface requested is supported by this object, return a pointer
 	// to the provider, with the reference count incremented by one.
-	if (riid == IID_IMSProvider  || riid == IID_IUnknown)
+	if (riid == IID_IMSProvider || riid == IID_IUnknown)
 	{
 		*ppvObj = (LPVOID)this;
 		// Increase usage count of this object
@@ -788,8 +789,8 @@ STDMETHODIMP_(ULONG) CMSProvider::AddRef()
 STDMETHODIMP_(ULONG) CMSProvider::Release()
 {
 	if (!m_pPSTMS) return NULL;
-	Log(true,"CMSProvider::Release() called\n");
-	ULONG ulRef =  m_pPSTMS->Release();
+	Log(true, "CMSProvider::Release() called\n");
+	ULONG ulRef = m_pPSTMS->Release();
 
 	m_cRef--;
 	if (m_cRef == 0)
@@ -816,10 +817,10 @@ STDMETHODIMP_(ULONG) CMSProvider::Release()
 STDMETHODIMP CMSProvider::Shutdown(ULONG * pulFlags)
 {
 	HRESULT hRes = S_OK;
-	Log(true,"CMSProvider::Shutdown\n");
-	hRes =m_pPSTMS->Shutdown(pulFlags);
-	Log(true,"CMSProvider::Shutdown returned: 0x%08X\n", hRes);
-	return hRes ;
+	Log(true, "CMSProvider::Shutdown\n");
+	hRes = m_pPSTMS->Shutdown(pulFlags);
+	Log(true, "CMSProvider::Shutdown returned: 0x%08X\n", hRes);
+	return hRes;
 } // CMSProvider::Shutdown
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -844,32 +845,32 @@ STDMETHODIMP CMSProvider::Shutdown(ULONG * pulFlags)
 //    Return Value
 //      An HRESULT
 STDMETHODIMP CMSProvider::Logon(
-								LPMAPISUP	  pSupObj,
-								ULONG_PTR	  ulUIParam,
-								LPTSTR		  pszProfileName,
-								ULONG		  cbEntryID,
-								LPENTRYID	  pEntryID,
-								ULONG		  ulFlags,
-								LPCIID		  pInterface,
-								ULONG * 	  pcbSpoolSecurity,
-								LPBYTE *	  ppbSpoolSecurity,
-								LPMAPIERROR * ppMAPIError,
-								LPMSLOGON *   ppMSLogon,
-								LPMDB * 	  ppMDB)
+	LPMAPISUP	  pSupObj,
+	ULONG_PTR	  ulUIParam,
+	LPTSTR		  pszProfileName,
+	ULONG		  cbEntryID,
+	LPENTRYID	  pEntryID,
+	ULONG		  ulFlags,
+	LPCIID		  pInterface,
+	ULONG * 	  pcbSpoolSecurity,
+	LPBYTE *	  ppbSpoolSecurity,
+	LPMAPIERROR * ppMAPIError,
+	LPMSLOGON *   ppMSLogon,
+	LPMDB * 	  ppMDB)
 {
 	HRESULT hRes = S_OK;
 	LPMDB lpPSTMDB = NULL;
 	CMsgStore* pWrappedMDB = NULL;
 
-	Log(true,"CMSProvider::Logon Pst logon Called\n");
+	Log(true, "CMSProvider::Logon Pst logon Called\n");
 
 	LPPROFSECT lpProfSect = NULL;
 	CSupport * pMySup = NULL;
-	hRes = GetGlobalProfileObject(pSupObj,&lpProfSect);
+	hRes = GetGlobalProfileObject(pSupObj, &lpProfSect);
 	pMySup = new CSupport(pSupObj, lpProfSect);
 	if (!pMySup)
 	{
-		Log(true,"CMSProvider::Logon: Failed to allocate new CSupport object\n");
+		Log(true, "CMSProvider::Logon: Failed to allocate new CSupport object\n");
 		hRes = E_OUTOFMEMORY;
 	}
 	if (SUCCEEDED(hRes))
@@ -890,20 +891,20 @@ STDMETHODIMP CMSProvider::Logon(
 			ppMSLogon,
 			&lpPSTMDB);
 	}
-	Log(true,"CMSProvider::Logon returned 0x%08X\n", hRes);
+	Log(true, "CMSProvider::Logon returned 0x%08X\n", hRes);
 
 	// Set up the MDB to allow synchronization
 	if (SUCCEEDED(hRes))
 	{
 		hRes = SetOLFIInOST(lpPSTMDB);
-		Log(true,"SetOLFIInOST returned 0x%08X\n", hRes);
+		Log(true, "SetOLFIInOST returned 0x%08X\n", hRes);
 	}
 
 	// Wrap the outgoing MDB.
-	pWrappedMDB = new CMsgStore (lpPSTMDB);
+	pWrappedMDB = new CMsgStore(lpPSTMDB);
 	if (NULL == pWrappedMDB)
 	{
-		Log(true,"CMSProvider::Logon: Failed to allocate new CMsgStore object\n");
+		Log(true, "CMSProvider::Logon: Failed to allocate new CMsgStore object\n");
 		hRes = E_OUTOFMEMORY;
 	}
 	// Copy pointer to the allocated object back into the return LPMDB object pointer
@@ -927,29 +928,29 @@ STDMETHODIMP CMSProvider::Logon(
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMSProvider::SpoolerLogon (LPMAPISUP	  pSupObj,
-										ULONG_PTR	  ulUIParam,
-										LPTSTR		  pszProfileName,
-										ULONG		  cbEntryID,
-										LPENTRYID	  pEntryID,
-										ULONG		  ulFlags,
-										LPCIID		  pInterface,
-										ULONG		  cbSpoolSecurity,
-										LPBYTE		  pbSpoolSecurity,
-										LPMAPIERROR * ppMAPIError,
-										LPMSLOGON *   ppMSLogon,
-										LPMDB * 	  ppMDB)
+STDMETHODIMP CMSProvider::SpoolerLogon(LPMAPISUP	  pSupObj,
+	ULONG_PTR	  ulUIParam,
+	LPTSTR		  pszProfileName,
+	ULONG		  cbEntryID,
+	LPENTRYID	  pEntryID,
+	ULONG		  ulFlags,
+	LPCIID		  pInterface,
+	ULONG		  cbSpoolSecurity,
+	LPBYTE		  pbSpoolSecurity,
+	LPMAPIERROR * ppMAPIError,
+	LPMSLOGON *   ppMSLogon,
+	LPMDB * 	  ppMDB)
 {
 	HRESULT hRes = S_OK;
 
-	Log(true,"CMSProvider::SpoolerLogon\n");
+	Log(true, "CMSProvider::SpoolerLogon\n");
 	LPPROFSECT lpProfSect = NULL;
 	CSupport * pMySup = NULL;
-	hRes = GetGlobalProfileObject(pSupObj,&lpProfSect);
+	hRes = GetGlobalProfileObject(pSupObj, &lpProfSect);
 	pMySup = new CSupport(pSupObj, lpProfSect);
 	if (!pMySup)
 	{
-		Log(true,"CMSProvider::SpoolerLogon: Failed to allocate new CSupport object\n");
+		Log(true, "CMSProvider::SpoolerLogon: Failed to allocate new CSupport object\n");
 		hRes = E_OUTOFMEMORY;
 	}
 	if (SUCCEEDED(hRes))
@@ -968,7 +969,7 @@ STDMETHODIMP CMSProvider::SpoolerLogon (LPMAPISUP	  pSupObj,
 			ppMSLogon,
 			ppMDB);
 	}
-	Log(true,"CMSProvider::SpoolerLogon returned 0x%08X\n", hRes);
+	Log(true, "CMSProvider::SpoolerLogon returned 0x%08X\n", hRes);
 
 	if (pMySup) pMySup->Release();
 	if (lpProfSect) lpProfSect->Release();
@@ -988,19 +989,19 @@ STDMETHODIMP CMSProvider::SpoolerLogon (LPMAPISUP	  pSupObj,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMSProvider::CompareStoreIDs (ULONG	 cbEntryID1,
-										   LPENTRYID pEntryID1,
-										   ULONG	 cbEntryID2,
-										   LPENTRYID pEntryID2,
-										   ULONG	 ulFlags,
-										   ULONG *	 pulResult)
+STDMETHODIMP CMSProvider::CompareStoreIDs(ULONG	 cbEntryID1,
+	LPENTRYID pEntryID1,
+	ULONG	 cbEntryID2,
+	LPENTRYID pEntryID2,
+	ULONG	 ulFlags,
+	ULONG *	 pulResult)
 {
 	HRESULT hRes = S_OK;
 
-	Log(true,"CMSProvider::CompareStoreIDs\n");
+	Log(true, "CMSProvider::CompareStoreIDs\n");
 	hRes = m_pPSTMS->CompareStoreIDs(cbEntryID1, pEntryID1, cbEntryID2, pEntryID2, ulFlags, pulResult);
 
-	Log(true,"CMSProvider::CompareStoreIDs returned 0x%08X\n", hRes);
+	Log(true, "CMSProvider::CompareStoreIDs returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1018,9 +1019,9 @@ STDMETHODIMP CMSProvider::CompareStoreIDs (ULONG	 cbEntryID1,
 //    Return Value
 //      None
 //
-CMsgStore::CMsgStore (LPMDB pPSTMsgStore)
+CMsgStore::CMsgStore(LPMDB pPSTMsgStore)
 {
-	Log(true,"In Constructor of CMsgStore\n");
+	Log(true, "In Constructor of CMsgStore\n");
 	m_pPSTMsgStore = pPSTMsgStore;
 	m_cRef = 1;
 }
@@ -1039,7 +1040,7 @@ CMsgStore::CMsgStore (LPMDB pPSTMsgStore)
 //
 CMsgStore::~CMsgStore()
 {
-	Log(true,"In Destructor of CMsgStore\n");
+	Log(true, "In Destructor of CMsgStore\n");
 	m_pPSTMsgStore = NULL;
 }
 
@@ -1057,7 +1058,7 @@ CMsgStore::~CMsgStore()
 //      S_OK            If successful. With the interface pointer in *ppvObj
 //      E_NOINTERFACE   If interface requested is not supported by this object
 //
-STDMETHODIMP CMsgStore::QueryInterface (REFIID riid, LPVOID * ppvObj)
+STDMETHODIMP CMsgStore::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
 	*ppvObj = NULL;
 
@@ -1076,7 +1077,7 @@ STDMETHODIMP CMsgStore::QueryInterface (REFIID riid, LPVOID * ppvObj)
 	return m_pPSTMsgStore->QueryInterface(riid, ppvObj);
 }
 
-STDMETHODIMP_(ULONG) CMsgStore::AddRef ()
+STDMETHODIMP_(ULONG) CMsgStore::AddRef()
 {
 	if (!m_pPSTMsgStore) return NULL;
 	m_cRef++;
@@ -1084,11 +1085,11 @@ STDMETHODIMP_(ULONG) CMsgStore::AddRef ()
 	return m_cRef;
 }
 
-STDMETHODIMP_(ULONG) CMsgStore::Release ()
+STDMETHODIMP_(ULONG) CMsgStore::Release()
 {
 	if (!m_pPSTMsgStore) return NULL;
-	Log(true,"CMsgStore::Release() called\n");
-	ULONG ulRef =  m_pPSTMsgStore->Release();
+	Log(true, "CMsgStore::Release() called\n");
+	ULONG ulRef = m_pPSTMsgStore->Release();
 
 	m_cRef--;
 	if (m_cRef == 0)
@@ -1118,10 +1119,10 @@ STDMETHODIMP_(ULONG) CMsgStore::Release ()
 //      An HRESULT
 //
 STDMETHODIMP CMsgStore::GetLastError(HRESULT	   hError,
-									 ULONG		   ulFlags,
-									 LPMAPIERROR * ppMAPIError)
+	ULONG		   ulFlags,
+	LPMAPIERROR * ppMAPIError)
 {
-	Log(true,"CMsgStore::GetLastError\n");
+	Log(true, "CMsgStore::GetLastError\n");
 	return m_pPSTMsgStore->GetLastError(
 		hError,
 		ulFlags,
@@ -1142,7 +1143,7 @@ STDMETHODIMP CMsgStore::GetLastError(HRESULT	   hError,
 //
 STDMETHODIMP CMsgStore::SaveChanges(ULONG ulFlags)
 {
-	Log(true,"CMsgStore::SaveChanges(ulFlags = 0x%08X\n",ulFlags);
+	Log(true, "CMsgStore::SaveChanges(ulFlags = 0x%08X\n", ulFlags);
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->SaveChanges(ulFlags);
@@ -1163,12 +1164,12 @@ STDMETHODIMP CMsgStore::SaveChanges(ULONG ulFlags)
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::GetProps (LPSPropTagArray pPropTagArray,
-								  ULONG 		  ulFlags,
-								  ULONG *		  pcValues,
-								  LPSPropValue *  ppPropArray)
+STDMETHODIMP CMsgStore::GetProps(LPSPropTagArray pPropTagArray,
+	ULONG 		  ulFlags,
+	ULONG *		  pcValues,
+	LPSPropValue *  ppPropArray)
 {
-	Log(true,"CMsgStore::GetProps\n");
+	Log(true, "CMsgStore::GetProps\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->GetProps(
@@ -1177,7 +1178,7 @@ STDMETHODIMP CMsgStore::GetProps (LPSPropTagArray pPropTagArray,
 		pcValues,
 		ppPropArray);
 
-	Log(true,"CMsgStore::GetProps returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::GetProps returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1194,17 +1195,17 @@ STDMETHODIMP CMsgStore::GetProps (LPSPropTagArray pPropTagArray,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::GetPropList (ULONG			   ulFlags,
-									 LPSPropTagArray * ppAllTags)
+STDMETHODIMP CMsgStore::GetPropList(ULONG			   ulFlags,
+	LPSPropTagArray * ppAllTags)
 {
-	Log(true,"CMsgStore::GetPropList\n");
+	Log(true, "CMsgStore::GetPropList\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->GetPropList(
 		ulFlags,
 		ppAllTags);
 
-	Log(true,"CMsgStore::GetPropList returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::GetPropList returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1220,13 +1221,13 @@ STDMETHODIMP CMsgStore::GetPropList (ULONG			   ulFlags,
 //    Return Value
 //      MAPI_E_NO_SUPPORT always.
 //
-STDMETHODIMP CMsgStore::OpenProperty (ULONG 	  ulPropTag,
-									  LPCIID	  piid,
-									  ULONG 	  ulInterfaceOptions,
-									  ULONG 	  ulFlags,
-									  LPUNKNOWN * ppUnk)
+STDMETHODIMP CMsgStore::OpenProperty(ULONG 	  ulPropTag,
+	LPCIID	  piid,
+	ULONG 	  ulInterfaceOptions,
+	ULONG 	  ulFlags,
+	LPUNKNOWN * ppUnk)
 {
-	Log(true,"CMsgStore::OpenProperty\n");
+	Log(true, "CMsgStore::OpenProperty\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->OpenProperty(
@@ -1236,7 +1237,7 @@ STDMETHODIMP CMsgStore::OpenProperty (ULONG 	  ulPropTag,
 		ulFlags,
 		ppUnk);
 
-	Log(true,"CMsgStore::OpenProperty returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::OpenProperty returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1252,11 +1253,11 @@ STDMETHODIMP CMsgStore::OpenProperty (ULONG 	  ulPropTag,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::SetProps (ULONG 				cValues,
-								  LPSPropValue			pPropArray,
-								  LPSPropProblemArray * ppProblems)
+STDMETHODIMP CMsgStore::SetProps(ULONG 				cValues,
+	LPSPropValue			pPropArray,
+	LPSPropProblemArray * ppProblems)
 {
-	Log(true,"CMsgStore::SetProps\n");
+	Log(true, "CMsgStore::SetProps\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->SetProps(
@@ -1264,7 +1265,7 @@ STDMETHODIMP CMsgStore::SetProps (ULONG 				cValues,
 		pPropArray,
 		ppProblems);
 
-	Log(true,"CMsgStore::SetProps returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::SetProps returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1280,17 +1281,17 @@ STDMETHODIMP CMsgStore::SetProps (ULONG 				cValues,
 //    Return Value
 //      MAPI_E_NO_SUPPORT always
 //
-STDMETHODIMP CMsgStore::DeleteProps (LPSPropTagArray	   pPropTagArray,
-									 LPSPropProblemArray * ppProblems)
+STDMETHODIMP CMsgStore::DeleteProps(LPSPropTagArray	   pPropTagArray,
+	LPSPropProblemArray * ppProblems)
 {
-	Log(true,"CMsgStore::DeleteProps\n");
+	Log(true, "CMsgStore::DeleteProps\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->DeleteProps(
 		pPropTagArray,
 		ppProblems);
 
-	Log(true,"CMsgStore::DeleteProps returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::DeleteProps returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1306,17 +1307,17 @@ STDMETHODIMP CMsgStore::DeleteProps (LPSPropTagArray	   pPropTagArray,
 //    Return Value
 //      MAPI_E_NO_SUPPORT always.
 //
-STDMETHODIMP CMsgStore::CopyTo (ULONG				  ciidExclude,
-								LPCIID				  rgiidExclude,
-								LPSPropTagArray 	  pExcludeProps,
-								ULONG_PTR			  ulUIParam,
-								LPMAPIPROGRESS		  pProgress,
-								LPCIID				  pInterface,
-								LPVOID				  pDestObj,
-								ULONG				  ulFlags,
-								LPSPropProblemArray * ppProblems)
+STDMETHODIMP CMsgStore::CopyTo(ULONG				  ciidExclude,
+	LPCIID				  rgiidExclude,
+	LPSPropTagArray 	  pExcludeProps,
+	ULONG_PTR			  ulUIParam,
+	LPMAPIPROGRESS		  pProgress,
+	LPCIID				  pInterface,
+	LPVOID				  pDestObj,
+	ULONG				  ulFlags,
+	LPSPropProblemArray * ppProblems)
 {
-	Log(true,"CMsgStore::CopyTo\n");
+	Log(true, "CMsgStore::CopyTo\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->CopyTo(
@@ -1330,7 +1331,7 @@ STDMETHODIMP CMsgStore::CopyTo (ULONG				  ciidExclude,
 		ulFlags,
 		ppProblems);
 
-	Log(true,"CMsgStore::CopyTo returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::CopyTo returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1346,15 +1347,15 @@ STDMETHODIMP CMsgStore::CopyTo (ULONG				  ciidExclude,
 //    Return Value
 //      MAPI_E_NO_SUPPORT always
 //
-STDMETHODIMP CMsgStore::CopyProps (LPSPropTagArray		 pIncludeProps,
-								   ULONG_PTR			 ulUIParam,
-								   LPMAPIPROGRESS		 pProgress,
-								   LPCIID				 pInterface,
-								   LPVOID				 pDestObj,
-								   ULONG				 ulFlags,
-								   LPSPropProblemArray * ppProblems)
+STDMETHODIMP CMsgStore::CopyProps(LPSPropTagArray		 pIncludeProps,
+	ULONG_PTR			 ulUIParam,
+	LPMAPIPROGRESS		 pProgress,
+	LPCIID				 pInterface,
+	LPVOID				 pDestObj,
+	ULONG				 ulFlags,
+	LPSPropProblemArray * ppProblems)
 {
-	Log(true,"CMsgStore::CopyProps\n");
+	Log(true, "CMsgStore::CopyProps\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->CopyProps(
@@ -1366,7 +1367,7 @@ STDMETHODIMP CMsgStore::CopyProps (LPSPropTagArray		 pIncludeProps,
 		ulFlags,
 		ppProblems);
 
-	Log(true,"CMsgStore::CopyProps returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::CopyProps returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1383,13 +1384,13 @@ STDMETHODIMP CMsgStore::CopyProps (LPSPropTagArray		 pIncludeProps,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::GetNamesFromIDs (LPSPropTagArray * ppPropTags,
-										 LPGUID 		   pPropSetGuid,
-										 ULONG			   ulFlags,
-										 ULONG *		   pcPropNames,
-										 LPMAPINAMEID **   pppPropNames)
+STDMETHODIMP CMsgStore::GetNamesFromIDs(LPSPropTagArray * ppPropTags,
+	LPGUID 		   pPropSetGuid,
+	ULONG			   ulFlags,
+	ULONG *		   pcPropNames,
+	LPMAPINAMEID **   pppPropNames)
 {
-	Log(true,"CMsgStore::GetNamesFromIDs\n");
+	Log(true, "CMsgStore::GetNamesFromIDs\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->GetNamesFromIDs(
@@ -1399,7 +1400,7 @@ STDMETHODIMP CMsgStore::GetNamesFromIDs (LPSPropTagArray * ppPropTags,
 		pcPropNames,
 		pppPropNames);
 
-	Log(true,"CMsgStore::GetNamesFromIDs returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::GetNamesFromIDs returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1416,12 +1417,12 @@ STDMETHODIMP CMsgStore::GetNamesFromIDs (LPSPropTagArray * ppPropTags,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::GetIDsFromNames (ULONG			   cPropNames,
-										 LPMAPINAMEID *    ppPropNames,
-										 ULONG			   ulFlags,
-										 LPSPropTagArray * ppPropTags)
+STDMETHODIMP CMsgStore::GetIDsFromNames(ULONG			   cPropNames,
+	LPMAPINAMEID *    ppPropNames,
+	ULONG			   ulFlags,
+	LPSPropTagArray * ppPropTags)
 {
-	Log(true,"CMsgStore::GetIDsFromNames\n");
+	Log(true, "CMsgStore::GetIDsFromNames\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->GetIDsFromNames(
@@ -1430,7 +1431,7 @@ STDMETHODIMP CMsgStore::GetIDsFromNames (ULONG			   cPropNames,
 		ulFlags,
 		ppPropTags);
 
-	Log(true,"CMsgStore::GetIDsFromNames returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::GetIDsFromNames returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1455,13 +1456,13 @@ STDMETHODIMP CMsgStore::GetIDsFromNames (ULONG			   cPropNames,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::Advise (ULONG			 cbEntryID,
-								LPENTRYID		 pEntryID,
-								ULONG			 ulEventMask,
-								LPMAPIADVISESINK pAdviseSink,
-								ULONG_PTR * 	 pulConnection)
+STDMETHODIMP CMsgStore::Advise(ULONG			 cbEntryID,
+	LPENTRYID		 pEntryID,
+	ULONG			 ulEventMask,
+	LPMAPIADVISESINK pAdviseSink,
+	ULONG_PTR * 	 pulConnection)
 {
-	Log(true,"CMsgStore::Advise\n");
+	Log(true, "CMsgStore::Advise\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->Advise(
@@ -1471,7 +1472,7 @@ STDMETHODIMP CMsgStore::Advise (ULONG			 cbEntryID,
 		pAdviseSink,
 		pulConnection);
 
-	Log(true,"CMsgStore::Advise returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::Advise returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1489,15 +1490,15 @@ STDMETHODIMP CMsgStore::Advise (ULONG			 cbEntryID,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::Unadvise (ULONG_PTR ulConnection)
+STDMETHODIMP CMsgStore::Unadvise(ULONG_PTR ulConnection)
 {
-	Log(true,"CMsgStore::Unadvise\n");
+	Log(true, "CMsgStore::Unadvise\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->Unadvise(
 		ulConnection);
 
-	Log(true,"CMsgStore::Unadvise returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::Unadvise returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1515,14 +1516,14 @@ STDMETHODIMP CMsgStore::Unadvise (ULONG_PTR ulConnection)
 //      An HRESULT. The comparison result is returned in the
 //      pulResult argument.
 //
-STDMETHODIMP CMsgStore::CompareEntryIDs (ULONG	   cbEntryID1,
-										 LPENTRYID pEntryID1,
-										 ULONG	   cbEntryID2,
-										 LPENTRYID pEntryID2,
-										 ULONG	   ulFlags,
-										 ULONG *   pulResult)
+STDMETHODIMP CMsgStore::CompareEntryIDs(ULONG	   cbEntryID1,
+	LPENTRYID pEntryID1,
+	ULONG	   cbEntryID2,
+	LPENTRYID pEntryID2,
+	ULONG	   ulFlags,
+	ULONG *   pulResult)
 {
-	Log(true,"CMsgStore::CompareEntryIDs\n");
+	Log(true, "CMsgStore::CompareEntryIDs\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->CompareEntryIDs(
@@ -1533,7 +1534,7 @@ STDMETHODIMP CMsgStore::CompareEntryIDs (ULONG	   cbEntryID1,
 		ulFlags,
 		pulResult);
 
-	Log(true,"CMsgStore::CompareEntryIDs returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::CompareEntryIDs returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1549,14 +1550,14 @@ STDMETHODIMP CMsgStore::CompareEntryIDs (ULONG	   cbEntryID1,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::OpenEntry (ULONG	   cbEntryID,
-								   LPENTRYID   pEntryID,
-								   LPCIID	   pInterface,
-								   ULONG	   ulFlags,
-								   ULONG *	   pulObjType,
-								   LPUNKNOWN * ppUnk)
+STDMETHODIMP CMsgStore::OpenEntry(ULONG	   cbEntryID,
+	LPENTRYID   pEntryID,
+	LPCIID	   pInterface,
+	ULONG	   ulFlags,
+	ULONG *	   pulObjType,
+	LPUNKNOWN * ppUnk)
 {
-	Log(true,"CMsgStore::OpenEntry\n");
+	Log(true, "CMsgStore::OpenEntry\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->OpenEntry(
@@ -1567,7 +1568,7 @@ STDMETHODIMP CMsgStore::OpenEntry (ULONG	   cbEntryID,
 		pulObjType,
 		ppUnk);
 
-	Log(true,"CMsgStore::OpenEntry returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::OpenEntry returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1584,12 +1585,12 @@ STDMETHODIMP CMsgStore::OpenEntry (ULONG	   cbEntryID,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::SetReceiveFolder (LPTSTR	szMessageClass,
-										  ULONG 	ulFlags,
-										  ULONG 	cbEntryID,
-										  LPENTRYID pEntryID)
+STDMETHODIMP CMsgStore::SetReceiveFolder(LPTSTR	szMessageClass,
+	ULONG 	ulFlags,
+	ULONG 	cbEntryID,
+	LPENTRYID pEntryID)
 {
-	Log(true,"CMsgStore::SetReceiveFolder\n");
+	Log(true, "CMsgStore::SetReceiveFolder\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->SetReceiveFolder(
@@ -1598,7 +1599,7 @@ STDMETHODIMP CMsgStore::SetReceiveFolder (LPTSTR	szMessageClass,
 		cbEntryID,
 		pEntryID);
 
-	Log(true,"CMsgStore::SetReceiveFolder returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::SetReceiveFolder returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1615,13 +1616,13 @@ STDMETHODIMP CMsgStore::SetReceiveFolder (LPTSTR	szMessageClass,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::GetReceiveFolder (LPTSTR	  szMessageClass,
-										  ULONG 	  ulFlags,
-										  ULONG *	  pcbEntryID,
-										  LPENTRYID * ppEntryID,
-										  LPTSTR *	  ppszExplicitClass)
+STDMETHODIMP CMsgStore::GetReceiveFolder(LPTSTR	  szMessageClass,
+	ULONG 	  ulFlags,
+	ULONG *	  pcbEntryID,
+	LPENTRYID * ppEntryID,
+	LPTSTR *	  ppszExplicitClass)
 {
-	Log(true,"CMsgStore::GetReceiveFolder\n");
+	Log(true, "CMsgStore::GetReceiveFolder\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->GetReceiveFolder(
@@ -1631,7 +1632,7 @@ STDMETHODIMP CMsgStore::GetReceiveFolder (LPTSTR	  szMessageClass,
 		ppEntryID,
 		ppszExplicitClass);
 
-	Log(true,"CMsgStore::GetReceiveFolder returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::GetReceiveFolder returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1648,15 +1649,15 @@ STDMETHODIMP CMsgStore::GetReceiveFolder (LPTSTR	  szMessageClass,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::GetReceiveFolderTable (ULONG		 ulFlags,
-											   LPMAPITABLE * ppTable)
+STDMETHODIMP CMsgStore::GetReceiveFolderTable(ULONG		 ulFlags,
+	LPMAPITABLE * ppTable)
 {
-	Log(true,"CMsgStore::GetReceiveFolderTable\n");
+	Log(true, "CMsgStore::GetReceiveFolderTable\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->GetReceiveFolderTable(ulFlags, ppTable);
 
-	Log(true,"CMsgStore::GetReceiveFolderTable returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::GetReceiveFolderTable returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1674,14 +1675,14 @@ STDMETHODIMP CMsgStore::GetReceiveFolderTable (ULONG		 ulFlags,
 //    Return Value
 //      S_OK always
 //
-STDMETHODIMP CMsgStore::StoreLogoff (ULONG * pulFlags)
+STDMETHODIMP CMsgStore::StoreLogoff(ULONG * pulFlags)
 {
-	Log(true,"CMsgStore::StoreLogoff\n");
+	Log(true, "CMsgStore::StoreLogoff\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->StoreLogoff(pulFlags);
 
-	Log(true,"CMsgStore::StoreLogoff returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::StoreLogoff returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1696,16 +1697,16 @@ STDMETHODIMP CMsgStore::StoreLogoff (ULONG * pulFlags)
 //    Return Value
 //      MAPI_E_UNABLE_TO_ABORT always
 //
-STDMETHODIMP CMsgStore::AbortSubmit (ULONG	   cbEntryID,
-									 LPENTRYID pEntryID,
-									 ULONG	   ulFlags)
+STDMETHODIMP CMsgStore::AbortSubmit(ULONG	   cbEntryID,
+	LPENTRYID pEntryID,
+	ULONG	   ulFlags)
 {
-	Log(true,"CMsgStore::AbortSubmit\n");
+	Log(true, "CMsgStore::AbortSubmit\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->AbortSubmit(cbEntryID, pEntryID, ulFlags);
 
-	Log(true,"CMsgStore::AbortSubmit returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::AbortSubmit returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1722,14 +1723,14 @@ STDMETHODIMP CMsgStore::AbortSubmit (ULONG	   cbEntryID,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::GetOutgoingQueue (ULONG ulFlags, LPMAPITABLE * ppTable)
+STDMETHODIMP CMsgStore::GetOutgoingQueue(ULONG ulFlags, LPMAPITABLE * ppTable)
 {
-	Log(true,"CMsgStore::GetOutgoingQueue\n");
+	Log(true, "CMsgStore::GetOutgoingQueue\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->GetOutgoingQueue(ulFlags, ppTable);
 
-	Log(true,"CMsgStore::GetOutgoingQueue returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::GetOutgoingQueue returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1746,15 +1747,15 @@ STDMETHODIMP CMsgStore::GetOutgoingQueue (ULONG ulFlags, LPMAPITABLE * ppTable)
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::SetLockState (LPMESSAGE pMessageObj,
-									  ULONG 	ulLockState)
+STDMETHODIMP CMsgStore::SetLockState(LPMESSAGE pMessageObj,
+	ULONG 	ulLockState)
 {
-	Log(true,"CMsgStore::SetLockState\n");
+	Log(true, "CMsgStore::SetLockState\n");
 	HRESULT hRes = S_OK;
 
-	hRes = m_pPSTMsgStore->SetLockState(pMessageObj,ulLockState);
+	hRes = m_pPSTMsgStore->SetLockState(pMessageObj, ulLockState);
 
-	Log(true,"CMsgStore::SetLockState returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::SetLockState returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1774,16 +1775,16 @@ STDMETHODIMP CMsgStore::SetLockState (LPMESSAGE pMessageObj,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::FinishedMsg (ULONG	   ulFlags,
-									 ULONG	   cbEntryID,
-									 LPENTRYID pEntryID)
+STDMETHODIMP CMsgStore::FinishedMsg(ULONG	   ulFlags,
+	ULONG	   cbEntryID,
+	LPENTRYID pEntryID)
 {
-	Log(true,"CMsgStore::FinishedMsg\n");
+	Log(true, "CMsgStore::FinishedMsg\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->FinishedMsg(ulFlags, cbEntryID, pEntryID);
 
-	Log(true,"CMsgStore::FinishedMsg returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::FinishedMsg returned 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -1801,20 +1802,20 @@ STDMETHODIMP CMsgStore::FinishedMsg (ULONG	   ulFlags,
 //    Return Value
 //      An HRESULT
 //
-STDMETHODIMP CMsgStore::NotifyNewMail (LPNOTIFICATION pNotification)
+STDMETHODIMP CMsgStore::NotifyNewMail(LPNOTIFICATION pNotification)
 {
-	Log(true,"CMsgStore::NotifyNewMail\n");
+	Log(true, "CMsgStore::NotifyNewMail\n");
 	HRESULT hRes = S_OK;
 
 	hRes = m_pPSTMsgStore->NotifyNewMail(pNotification);
 
-	Log(true,"CMsgStore::NotifyNewMail returned 0x%08X\n", hRes);
+	Log(true, "CMsgStore::NotifyNewMail returned 0x%08X\n", hRes);
 	return hRes;
 }
 
 HRESULT SetTopSourceKey(LPMDB lpMDB)
 {
-	Log(true,"SetTopSourceKey\n");
+	Log(true, "SetTopSourceKey\n");
 	if (!lpMDB) return MAPI_E_INVALID_PARAMETER;
 
 	HRESULT hRes = S_OK;
@@ -1824,11 +1825,11 @@ HRESULT SetTopSourceKey(LPMDB lpMDB)
 
 	propVal[0].ulPropTag = PR_SOURCE_KEY;
 	propVal[0].Value.bin.cb = sizeof(SKEY);
-	propVal[0].Value.bin.lpb = (LPBYTE ) &mySourceKey;
+	propVal[0].Value.bin.lpb = (LPBYTE)&mySourceKey;
 
 	hRes = lpMDB->SetProps(1, propVal, NULL);
 
-	Log(true,"SetTopSourceKey returning 0x%08X\n",hRes);
+	Log(true, "SetTopSourceKey returning 0x%08X\n", hRes);
 	return hRes;
 
 }
@@ -1836,7 +1837,7 @@ HRESULT SetTopSourceKey(LPMDB lpMDB)
 HRESULT STDAPICALLTYPE HrSyncEnd(LPOSTX pOstx, HRESULT hResIn)
 {
 	HRESULT hRes = S_OK;
-	Log(true,"HrSyncEnd(0x%08X)\n",hResIn);
+	Log(true, "HrSyncEnd(0x%08X)\n", hResIn);
 
 	if (!pOstx) return MAPI_E_INVALID_PARAMETER;
 
@@ -1846,12 +1847,12 @@ HRESULT STDAPICALLTYPE HrSyncEnd(LPOSTX pOstx, HRESULT hResIn)
 		hRes = pOstx->SyncEnd();
 		if (FAILED(hRes))
 		{
-			Log(true,"SyncEnd() returning 0x%08X\n",hRes);
+			Log(true, "SyncEnd() returning 0x%08X\n", hRes);
 		}
 	}
 	else
 	{
-		Log(true,"SetSyncResult(0x%08X) returning 0x%08X\n",hResIn,hRes);
+		Log(true, "SetSyncResult(0x%08X) returning 0x%08X\n", hResIn, hRes);
 	}
 
 	if (FAILED(hRes)) return hRes;
@@ -1861,7 +1862,7 @@ HRESULT STDAPICALLTYPE HrSyncEnd(LPOSTX pOstx, HRESULT hResIn)
 // Download means bring content from the backend server into the PST
 HRESULT STDAPICALLTYPE SyncDownloadFolders(LPOSTX pOstx)
 {
-	Log(true,"SyncDownloadFolders begin\n");
+	Log(true, "SyncDownloadFolders begin\n");
 	HRESULT        hRes = S_OK;
 	struct SYNC*   pSync = NULL;
 	struct DNHIER* pDownHierSync = NULL;
@@ -1893,7 +1894,7 @@ HRESULT STDAPICALLTYPE SyncDownloadFolders(LPOSTX pOstx)
 	pVals[4].ulPropTag = PR_COMMENT_W;
 	pVals[4].Value.lpszW = L"Folder synched in with Replication API";
 
-	pVals[5].ulPropTag = PR_PREDECESSOR_CHANGE_LIST ;
+	pVals[5].ulPropTag = PR_PREDECESSOR_CHANGE_LIST;
 	pVals[5].Value.bin.cb = 0;
 	pVals[5].Value.bin.lpb = 0;
 
@@ -1902,96 +1903,96 @@ HRESULT STDAPICALLTYPE SyncDownloadFolders(LPOSTX pOstx)
 	pVals[6].Value.bin.lpb = (LPBYTE)&sk4;
 
 	hRes = pOstx->InitSync(SYNC_DOWNLOAD_HIERARCHY);
-	Log(true,"InitSync(SYNC_DOWNLOAD_HIERARCHY) returning 0x%08X\n",hRes);
+	Log(true, "InitSync(SYNC_DOWNLOAD_HIERARCHY) returning 0x%08X\n", hRes);
 	if (SUCCEEDED(hRes))
 	{
-		hRes = pOstx->SyncBeg(LR_SYNC, (LPVOID *)&pSync );
-		Log(true,"SyncBeg(LR_SYNC, (LPVOID *)&pSync ) returning 0x%08X\n",hRes);
+		hRes = pOstx->SyncBeg(LR_SYNC, (LPVOID *)&pSync);
+		Log(true, "SyncBeg(LR_SYNC, (LPVOID *)&pSync ) returning 0x%08X\n", hRes);
 		if (SUCCEEDED(hRes) && pSync)
 		{
 			pSync->ulFlags = UPS_DNLOAD_ONLY;
 
-			hRes = pOstx->SyncBeg(LR_SYNC_DOWNLOAD_HIERARCHY , (LPVOID *)&pDownHierSync);
-			Log(true,"SyncBeg(LR_SYNC_DOWNLOAD_HIERARCHY , (LPVOID *)&pDownHierSync) returning 0x%08X\n",hRes);
+			hRes = pOstx->SyncBeg(LR_SYNC_DOWNLOAD_HIERARCHY, (LPVOID *)&pDownHierSync);
+			Log(true, "SyncBeg(LR_SYNC_DOWNLOAD_HIERARCHY , (LPVOID *)&pDownHierSync) returning 0x%08X\n", hRes);
 			if (SUCCEEDED(hRes) && pDownHierSync && pDownHierSync->pxihc)
 			{
 				pxihc = pDownHierSync->pxihc;
 				hRes = pxihc->Config(NULL, NULL);
-				Log(true,"pxihc->Config returning 0x%08X\n",hRes);
+				Log(true, "pxihc->Config returning 0x%08X\n", hRes);
 				if (SUCCEEDED(hRes))
 				{
 					// This is where the PST is notified that there are changes for it
 					// For demonstration purposes, the change is just a single new folder
-					hRes = pxihc->ImportFolderChange(sizeof(pVals)/sizeof(SPropValue), pVals);
-					Log(true,"pxihc->ImportFolderChange returning 0x%08X\n",hRes);
+					hRes = pxihc->ImportFolderChange(sizeof(pVals) / sizeof(SPropValue), pVals);
+					Log(true, "pxihc->ImportFolderChange returning 0x%08X\n", hRes);
 				}
 			}
-			hRes = HrSyncEnd(pOstx,hRes);
+			hRes = HrSyncEnd(pOstx, hRes);
 		}
-		hRes = HrSyncEnd(pOstx,hRes);
+		hRes = HrSyncEnd(pOstx, hRes);
 	}
-	Log(true,"SyncDownloadFolders returning 0x%08X\n",hRes);
+	Log(true, "SyncDownloadFolders returning 0x%08X\n", hRes);
 	return hRes;
 } // SyncDownloadFolders
 
 // Upload means push content from the PST into the backend server
 HRESULT STDAPICALLTYPE SyncUploadFolders(LPOSTX pOstx)
 {
-	Log(true,"SyncUploadFolders begin\n");
+	Log(true, "SyncUploadFolders begin\n");
 	HRESULT        hRes = S_OK;
 	struct SYNC*   pSync = NULL;
 	struct UPHIER* pUpHierSync = NULL;
 	struct UPFLD*  pUpFolderSync = NULL;
 
 	hRes = pOstx->InitSync(SYNC_UPLOAD_HIERARCHY);
-	Log(true,"InitSync(SYNC_UPLOAD_HIERARCHY) returning 0x%08X\n",hRes);
+	Log(true, "InitSync(SYNC_UPLOAD_HIERARCHY) returning 0x%08X\n", hRes);
 	if (SUCCEEDED(hRes))
 	{
 		hRes = pOstx->SyncBeg(LR_SYNC, (LPVOID *)&pSync);
-		Log(true,"SyncBeg(LR_SYNC, (LPVOID *)&pSync) returning 0x%08X\n",hRes);
+		Log(true, "SyncBeg(LR_SYNC, (LPVOID *)&pSync) returning 0x%08X\n", hRes);
 		if (SUCCEEDED(hRes) && pSync)
 		{
 			pSync->ulFlags = UPS_UPLOAD_ONLY;
 
 			hRes = pOstx->SyncBeg(LR_SYNC_UPLOAD_HIERARCHY, (LPVOID *)&pUpHierSync);
-			Log(true,"SyncBeg(LR_SYNC_UPLOAD_HIERARCHY, (LPVOID *)&pUpHierSync ) returning 0x%08X\n",hRes);
+			Log(true, "SyncBeg(LR_SYNC_UPLOAD_HIERARCHY, (LPVOID *)&pUpHierSync ) returning 0x%08X\n", hRes);
 			if (SUCCEEDED(hRes) && pUpHierSync)
 			{
 				hRes = pOstx->SyncBeg(LR_SYNC_UPLOAD_FOLDER, (LPVOID *)&pUpFolderSync);
-				Log(true,"SyncBeg(LR_SYNC_UPLOAD_FOLDER, (LPVOID *)&pUpFolderSync) returning 0x%08X\n",hRes);
+				Log(true, "SyncBeg(LR_SYNC_UPLOAD_FOLDER, (LPVOID *)&pUpFolderSync) returning 0x%08X\n", hRes);
 
 				if (SUCCEEDED(hRes) && pUpFolderSync)
 				{
 
 				}
 
-				hRes = HrSyncEnd(pOstx,hRes);
+				hRes = HrSyncEnd(pOstx, hRes);
 			}
-			hRes = HrSyncEnd(pOstx,hRes);
+			hRes = HrSyncEnd(pOstx, hRes);
 		}
-		hRes = HrSyncEnd(pOstx,hRes);
+		hRes = HrSyncEnd(pOstx, hRes);
 	}
-	Log(true,"SyncUploadFolders returning 0x%08X\n",hRes);
+	Log(true, "SyncUploadFolders returning 0x%08X\n", hRes);
 	return hRes;
 } // SyncUploadFolders
 
 // Dummy function to sync a single message into a folder
-HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum,DNTBL *pDownTblSync)
+HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum, DNTBL *pDownTblSync)
 {
 	if (!pDownTblSync) return MAPI_E_INVALID_PARAMETER;
 
 	HRESULT hRes = S_OK;
-	Log(true,"pDownTblSync->pszName = \"%S\"\n",pDownTblSync->pszName);
+	Log(true, "pDownTblSync->pszName = \"%S\"\n", pDownTblSync->pszName);
 
 	LPMESSAGE	lpMessage = NULL;
 	MEID*		lpmeid = NULL;
 	ULONG		cbmeid = NULL;
 	PXICC		pxicc = pDownTblSync->pxicc;
 	SPropValue	pVals[3];
-	SKEY		sk1 = {0};
+	SKEY		sk1 = { 0 };
 
 	hRes = pxicc->Config(NULL, NULL);
-	Log(true,"pxicc->Config(NULL, NULL) returning 0x%08X\n",hRes);
+	Log(true, "pxicc->Config(NULL, NULL) returning 0x%08X\n", hRes);
 	if (FAILED(hRes)) return hRes;
 
 	GetSourceKey(&sk1, 0, 0);
@@ -2008,21 +2009,21 @@ HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum,DNTBL *pDownTblSync)
 			NULL,
 			NULL,
 			&ulObjType,
-			(LPUNKNOWN*) &lpOtherMessage);
-		Log(true,"lpMDB->OpenEntry returning 0x%08X\n",hRes);
+			(LPUNKNOWN*)&lpOtherMessage);
+		Log(true, "lpMDB->OpenEntry returning 0x%08X\n", hRes);
 
 		if (lpOtherMessage)
 		{
 			LPSPropValue lpProp = NULL;
-			hRes = HrGetOneProp(lpOtherMessage,PR_DISPLAY_NAME_A,&lpProp);
-			Log(true,"lpMDB->OpenEntry returning 0x%08X\n",hRes);
+			hRes = HrGetOneProp(lpOtherMessage, PR_DISPLAY_NAME_A, &lpProp);
+			Log(true, "lpMDB->OpenEntry returning 0x%08X\n", hRes);
 
 			if (SUCCEEDED(hRes) &&
 				lpProp &&
 				PR_DISPLAY_NAME_A == lpProp->ulPropTag &&
 				NULL != lpProp->Value.lpszA)
 			{
-				Log(true,"Display Name \"%s\"\n",lpProp->Value.lpszA);
+				Log(true, "Display Name \"%s\"\n", lpProp->Value.lpszA);
 			}
 
 			MyFreeBuffer(lpProp);
@@ -2031,15 +2032,15 @@ HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum,DNTBL *pDownTblSync)
 
 	}
 
-	hRes = CreateMsgEntryID(bFolderNum,sizeof(FEID),&pDownTblSync->feid,&lpmeid,&cbmeid);
-	Log(true,"CreateMsgEntryID returning 0x%08X\n",hRes);
+	hRes = CreateMsgEntryID(bFolderNum, sizeof(FEID), &pDownTblSync->feid, &lpmeid, &cbmeid);
+	Log(true, "CreateMsgEntryID returning 0x%08X\n", hRes);
 	if (SUCCEEDED(hRes))
 	{
 		pVals[0].ulPropTag = PR_CHANGE_KEY;
 		pVals[0].Value.bin.cb = sizeof(SKEY);
 		pVals[0].Value.bin.lpb = (LPBYTE)&sk1;
 
-		pVals[1].ulPropTag = PR_PREDECESSOR_CHANGE_LIST ;
+		pVals[1].ulPropTag = PR_PREDECESSOR_CHANGE_LIST;
 		pVals[1].Value.bin.cb = 0;   // Just the first one
 		pVals[1].Value.bin.lpb = NULL;
 
@@ -2047,8 +2048,8 @@ HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum,DNTBL *pDownTblSync)
 		pVals[2].Value.bin.cb = cbmeid;
 		pVals[2].Value.bin.lpb = (LPBYTE)lpmeid;
 
-		hRes = pxicc->ImportMessageChange(sizeof(pVals)/sizeof(SPropValue), pVals, 0, &lpMessage);
-		Log(true,"pxicc->ImportMessageChange returning 0x%08X\n",hRes);
+		hRes = pxicc->ImportMessageChange(sizeof(pVals) / sizeof(SPropValue), pVals, 0, &lpMessage);
+		Log(true, "pxicc->ImportMessageChange returning 0x%08X\n", hRes);
 
 		if (lpMessage)
 		{
@@ -2070,11 +2071,11 @@ HRESULT SyncOneContent(LPMDB lpMDB, BYTE bFolderNum,DNTBL *pDownTblSync)
 			pValsToSet[4].ulPropTag = PR_MESSAGE_FLAGS;
 			pValsToSet[4].Value.l = MSGFLAG_UNMODIFIED;
 
-			hRes = lpMessage->SetProps(sizeof(pValsToSet)/sizeof(SPropValue),pValsToSet,NULL);
-			Log(true,"lpMessage->SetProps returning 0x%08X\n",hRes);
+			hRes = lpMessage->SetProps(sizeof(pValsToSet) / sizeof(SPropValue), pValsToSet, NULL);
+			Log(true, "lpMessage->SetProps returning 0x%08X\n", hRes);
 
 			hRes = lpMessage->SaveChanges(0);
-			Log(true,"lpMessage->SaveChanges returning 0x%08X\n",hRes);
+			Log(true, "lpMessage->SaveChanges returning 0x%08X\n", hRes);
 			lpMessage->Release();
 		}
 	}
@@ -2093,17 +2094,17 @@ HRESULT STDAPICALLTYPE SyncDownloadContent(LPMDB lpMDB, LPOSTX pOstx)
 	int i = 0;
 
 	hRes = pOstx->InitSync(SYNC_DOWNLOAD_CONTENTS);
-	Log(true,"InitSync(SYNC_DOWNLOAD_CONTENTS) returning 0x%08X\n",hRes);
+	Log(true, "InitSync(SYNC_DOWNLOAD_CONTENTS) returning 0x%08X\n", hRes);
 	if (SUCCEEDED(hRes))
 	{
 		hRes = pOstx->SyncBeg(LR_SYNC, (LPVOID *)&pSync);
-		Log(true,"SyncBeg(LR_SYNC, (LPVOID *)&pSync ) returning 0x%08X\n",hRes);
+		Log(true, "SyncBeg(LR_SYNC, (LPVOID *)&pSync ) returning 0x%08X\n", hRes);
 		if (SUCCEEDED(hRes))
 		{
 			pSync->ulFlags = UPS_DNLOAD_ONLY;
 
-			hRes = pOstx->SyncBeg(LR_SYNC_CONTENTS , (LPVOID *)&pSyncContents);
-			Log(true,"SyncBeg(LR_SYNC_CONTENTS , (LPVOID *)&pSyncContents ) returning 0x%08X\n",hRes);
+			hRes = pOstx->SyncBeg(LR_SYNC_CONTENTS, (LPVOID *)&pSyncContents);
+			Log(true, "SyncBeg(LR_SYNC_CONTENTS , (LPVOID *)&pSyncContents ) returning 0x%08X\n", hRes);
 			if (SUCCEEDED(hRes))
 			{
 				for (i = 0; i < (int)pSyncContents->cEnt; i++)
@@ -2115,19 +2116,19 @@ HRESULT STDAPICALLTYPE SyncDownloadContent(LPMDB lpMDB, LPOSTX pOstx)
 					// to fill out the data structures
 					// If this is removed, the pszName and feid won't be any good
 					struct UPTBL *pUpTblSync = NULL;
-					hRes = pOstx->SyncBeg(LR_SYNC_UPLOAD_TABLE , (LPVOID *)&pUpTblSync);
-					Log(true,"SyncBeg(LR_SYNC_UPLOAD_TABLE , (LPVOID *)&pUpTblSync ) returning 0x%08X\n",hRes);
+					hRes = pOstx->SyncBeg(LR_SYNC_UPLOAD_TABLE, (LPVOID *)&pUpTblSync);
+					Log(true, "SyncBeg(LR_SYNC_UPLOAD_TABLE , (LPVOID *)&pUpTblSync ) returning 0x%08X\n", hRes);
 					hRes = HrSyncEnd(pOstx, hRes);
 
 					if (SUCCEEDED(hRes))
 					{
 						struct DNTBL *pDownTblSync = NULL;
-						hRes = pOstx->SyncBeg(LR_SYNC_DOWNLOAD_TABLE , (LPVOID *)&pDownTblSync);
-						Log(true,"SyncBeg(LR_SYNC_DOWNLOAD_TABLE , (LPVOID *)&pDownTblSync ) returning 0x%08X\n",hRes);
+						hRes = pOstx->SyncBeg(LR_SYNC_DOWNLOAD_TABLE, (LPVOID *)&pDownTblSync);
+						Log(true, "SyncBeg(LR_SYNC_DOWNLOAD_TABLE , (LPVOID *)&pDownTblSync ) returning 0x%08X\n", hRes);
 						if (SUCCEEDED(hRes))
 						{
-							hRes = SyncOneContent(lpMDB, (BYTE)i,pDownTblSync);
-							Log(true,"SyncOneContent(pDownTblSync) returning 0x%08X\n",hRes);
+							hRes = SyncOneContent(lpMDB, (BYTE)i, pDownTblSync);
+							Log(true, "SyncOneContent(pDownTblSync) returning 0x%08X\n", hRes);
 						}
 						hRes = HrSyncEnd(pOstx, hRes);
 					}
@@ -2141,7 +2142,7 @@ HRESULT STDAPICALLTYPE SyncDownloadContent(LPMDB lpMDB, LPOSTX pOstx)
 		hRes = HrSyncEnd(pOstx, hRes);
 	}
 
-	Log(true,"SyncDownloadContent returning 0x%08X\n",hRes);
+	Log(true, "SyncDownloadContent returning 0x%08X\n", hRes);
 	return hRes;
 }
 
@@ -2149,11 +2150,11 @@ HRESULT STDAPICALLTYPE SyncDownloadContent(LPMDB lpMDB, LPOSTX pOstx)
 HRESULT STDAPICALLTYPE DoSync(LPMDB lpMDB)
 {
 	HRESULT hRes = S_OK;
-	Log(true,"DoSync begin\n");
+	Log(true, "DoSync begin\n");
 	if (!lpMDB)
 	{
-		Log(true,"DoSync not passed an MDB\n");
-		MessageBox(GetActiveWindow(),"Didn't have a store to sync","Sync Error",MB_OK|MB_ICONERROR);
+		Log(true, "DoSync not passed an MDB\n");
+		MessageBox(GetActiveWindow(), "Didn't have a store to sync", "Sync Error", MB_OK | MB_ICONERROR);
 		return S_OK;
 	}
 
@@ -2166,18 +2167,18 @@ HRESULT STDAPICALLTYPE DoSync(LPMDB lpMDB)
 	SetTopSourceKey(lpMDB);
 
 	hRes = lpMDB->QueryInterface(IID_IPSTX, (void**)&pPstx);
-	Log(true,"QueryInterface(IID_IPSTX) returning 0x%08X\n",hRes);
+	Log(true, "QueryInterface(IID_IPSTX) returning 0x%08X\n", hRes);
 
 	if (SUCCEEDED(hRes) && pPstx)
 	{
 		hRes = pPstx->GetSyncObject(&pOstx);
-		Log(true,"GetSyncObject returning 0x%08X\n",hRes);
+		Log(true, "GetSyncObject returning 0x%08X\n", hRes);
 
 		if (SUCCEEDED(hRes) && pOstx)
 		{
 			hRes = SyncDownloadFolders(pOstx);
 			hRes = SyncUploadFolders(pOstx);
-			hRes = SyncDownloadContent(lpMDB,pOstx);
+			hRes = SyncDownloadContent(lpMDB, pOstx);
 		}
 	}
 
@@ -2186,13 +2187,13 @@ HRESULT STDAPICALLTYPE DoSync(LPMDB lpMDB)
 
 	if (FAILED(hRes))
 	{
-		Log(true,"DoSync returning 0x%08X\n",hRes);
-		MessageBox(GetActiveWindow(),"DoSync failed","Sync Error",MB_OK|MB_ICONERROR);
+		Log(true, "DoSync returning 0x%08X\n", hRes);
+		MessageBox(GetActiveWindow(), "DoSync failed", "Sync Error", MB_OK | MB_ICONERROR);
 	}
 	else
 	{
-		Log(true,"DoSync returning S_OK\n");
-		MessageBox(GetActiveWindow(),"DoSync succeeded!","Sync Success",MB_OK);
+		Log(true, "DoSync returning S_OK\n");
+		MessageBox(GetActiveWindow(), "DoSync succeeded!", "Sync Success", MB_OK);
 	}
 	return hRes;
 } // DoSync
@@ -2218,11 +2219,11 @@ void _stdcall TestDoSync()
 			hRes = lpMAPISession->GetMsgStoresTable(0, &lpStoresTable);
 			if (SUCCEEDED(hRes) && lpStoresTable)
 			{
-				SRestriction sres = {0};
-				SPropValue   spv = {0};
+				SRestriction sres = { 0 };
+				SPropValue   spv = { 0 };
 				LPSRowSet    pRow = NULL;
-				enum {EID, NAME, NUM_COLS};
-				static SizedSPropTagArray(NUM_COLS,sptCols) = {NUM_COLS, PR_ENTRYID, PR_DISPLAY_NAME};
+				enum { EID, NAME, NUM_COLS };
+				static SizedSPropTagArray(NUM_COLS, sptCols) = { NUM_COLS, PR_ENTRYID, PR_DISPLAY_NAME };
 
 				sres.rt = RES_PROPERTY;
 				sres.res.resProperty.relop = RELOP_EQ;
@@ -2230,12 +2231,12 @@ void _stdcall TestDoSync()
 				sres.res.resProperty.lpProp = &spv;
 
 				spv.ulPropTag = PR_MDB_PROVIDER;
-				spv.Value.bin.cb  = sizeof(GUID);
-				spv.Value.bin.lpb = (LPBYTE) &g_muidProvPrvNST;
+				spv.Value.bin.cb = sizeof(GUID);
+				spv.Value.bin.lpb = (LPBYTE)&g_muidProvPrvNST;
 
 				hRes = HrQueryAllRows(
 					lpStoresTable,
-					(LPSPropTagArray) &sptCols,
+					(LPSPropTagArray)&sptCols,
 					&sres,
 					NULL,
 					0,
@@ -2255,7 +2256,7 @@ void _stdcall TestDoSync()
 							&lpWrapMDB);
 						if (SUCCEEDED(hRes) && lpWrapMDB)
 						{
-							(void) DoSync(lpWrapMDB);
+							(void)DoSync(lpWrapMDB);
 						}
 						if (lpWrapMDB) lpWrapMDB->Release();
 					}

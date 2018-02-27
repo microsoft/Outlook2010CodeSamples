@@ -1,9 +1,9 @@
 #include "stdafx.h"
 
 CXPStatus::CXPStatus(CXPLogon* pParent, LPMAPISUP pMAPISup, ULONG cIdentityProps, LPSPropValue pIdentityProps,
-		LPALLOCATEBUFFER pAllocBuffer, LPALLOCATEMORE pAllocMore, LPFREEBUFFER pFreeBuffer)
+	LPALLOCATEBUFFER pAllocBuffer, LPALLOCATEMORE pAllocMore, LPFREEBUFFER pFreeBuffer)
 {
-	Log(true, _T("CXPStatus object created at address 0x%08x\n"), ULONG(this));
+	Log(true, _T("CXPStatus object created at address 0x%p\n"), this);
 
 	m_cRef = 1;
 	InitializeCriticalSection(&m_csObj);
@@ -25,7 +25,7 @@ CXPStatus::CXPStatus(CXPLogon* pParent, LPMAPISUP pMAPISup, ULONG cIdentityProps
 
 CXPStatus::~CXPStatus()
 {
-	Log(true, _T("CXPStatus object destroyed at address 0x%08x\n"), ULONG(this));
+	Log(true, _T("CXPStatus object destroyed at address 0x%p\n"), this);
 
 	if (m_pMAPISup)
 		m_pMAPISup->Release();
@@ -63,8 +63,8 @@ STDMETHODIMP CXPStatus::QueryInterface(REFIID riid, LPVOID* ppvObj)
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::GetLastError(HRESULT /*hResult*/,
-									 ULONG /*ulFlags*/,
-									 LPMAPIERROR FAR* /*lppMAPIError*/)
+	ULONG /*ulFlags*/,
+	LPMAPIERROR FAR* /*lppMAPIError*/)
 {
 	Log(true, _T("CXPStatus::GetLastError function called\n"));
 
@@ -98,9 +98,9 @@ STDMETHODIMP CXPStatus::SaveChanges(ULONG /*ulFlags*/)
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::GetProps(LPSPropTagArray lpPropTagArray,
-								 ULONG ulFlags,
-								 ULONG FAR* lpcValues,
-								 LPSPropValue FAR* lppPropArray)
+	ULONG ulFlags,
+	ULONG FAR* lpcValues,
+	LPSPropValue FAR* lppPropArray)
 {
 	Log(true, _T("CXPStatus::GetProps function called\n"));
 
@@ -289,7 +289,7 @@ STDMETHODIMP CXPStatus::GetProps(LPSPropTagArray lpPropTagArray,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::GetPropList(ULONG ulFlags,
-									LPSPropTagArray FAR* lppPropTagArray)
+	LPSPropTagArray FAR* lppPropTagArray)
 {
 	Log(true, _T("CXPStatus::GetPropList function called\n"));
 
@@ -335,10 +335,10 @@ STDMETHODIMP CXPStatus::GetPropList(ULONG ulFlags,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::OpenProperty(ULONG /*ulPropTag*/,
-									 LPCIID /*lpiid*/,
-									 ULONG /*ulInterfaceOptions*/,
-									 ULONG /*ulFlags*/,
-									 LPUNKNOWN FAR* /*lppUnk*/)
+	LPCIID /*lpiid*/,
+	ULONG /*ulInterfaceOptions*/,
+	ULONG /*ulFlags*/,
+	LPUNKNOWN FAR* /*lppUnk*/)
 {
 	Log(true, _T("CXPStatus::OpenProperty function called\n"));
 
@@ -353,8 +353,8 @@ STDMETHODIMP CXPStatus::OpenProperty(ULONG /*ulPropTag*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::SetProps(ULONG /*cValues*/,
-								 LPSPropValue /*lpPropArray*/,
-								 LPSPropProblemArray FAR* /*lppProblems*/)
+	LPSPropValue /*lpPropArray*/,
+	LPSPropProblemArray FAR* /*lppProblems*/)
 {
 	Log(true, _T("CXPStatus::SetProps function called\n"));
 
@@ -369,7 +369,7 @@ STDMETHODIMP CXPStatus::SetProps(ULONG /*cValues*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::DeleteProps(LPSPropTagArray /*lpPropTagArray*/,
-									LPSPropProblemArray FAR* /*lppProblems*/)
+	LPSPropProblemArray FAR* /*lppProblems*/)
 {
 	Log(true, _T("CXPStatus::DeleteProps function called\n"));
 
@@ -384,14 +384,14 @@ STDMETHODIMP CXPStatus::DeleteProps(LPSPropTagArray /*lpPropTagArray*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::CopyTo(ULONG /*ciidExclude*/,
-							   LPCIID /*rgiidExclude*/,
-							   LPSPropTagArray /*lpExcludeProps*/,
-							   ULONG_PTR /*ulUIParam*/,
-							   LPMAPIPROGRESS /*lpProgress*/,
-							   LPCIID /*lpInterface*/,
-							   LPVOID /*lpDestObj*/,
-							   ULONG /*ulFlags*/,
-							   LPSPropProblemArray FAR* /*lppProblems*/)
+	LPCIID /*rgiidExclude*/,
+	LPSPropTagArray /*lpExcludeProps*/,
+	ULONG_PTR /*ulUIParam*/,
+	LPMAPIPROGRESS /*lpProgress*/,
+	LPCIID /*lpInterface*/,
+	LPVOID /*lpDestObj*/,
+	ULONG /*ulFlags*/,
+	LPSPropProblemArray FAR* /*lppProblems*/)
 {
 	Log(true, _T("CXPStatus::CopyTo function called\n"));
 
@@ -406,12 +406,12 @@ STDMETHODIMP CXPStatus::CopyTo(ULONG /*ciidExclude*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::CopyProps(LPSPropTagArray /*lpIncludeProps*/,
-								  ULONG_PTR /*ulUIParam*/,
-								  LPMAPIPROGRESS /*lpProgress*/,
-								  LPCIID /*lpInterface*/,
-								  LPVOID /*lpDestObj*/,
-								  ULONG /*ulFlags*/,
-								  LPSPropProblemArray FAR* /*lppProblems*/)
+	ULONG_PTR /*ulUIParam*/,
+	LPMAPIPROGRESS /*lpProgress*/,
+	LPCIID /*lpInterface*/,
+	LPVOID /*lpDestObj*/,
+	ULONG /*ulFlags*/,
+	LPSPropProblemArray FAR* /*lppProblems*/)
 {
 	Log(true, _T("CXPStatus::CopyProps function called\n"));
 
@@ -426,10 +426,10 @@ STDMETHODIMP CXPStatus::CopyProps(LPSPropTagArray /*lpIncludeProps*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::GetNamesFromIDs(LPSPropTagArray FAR* /*lppPropTags*/,
-										LPGUID /*lpPropSetGuid*/,
-										ULONG /*ulFlags*/,
-										ULONG FAR* /*lpcPropNames*/,
-										LPMAPINAMEID FAR* FAR* /*lpppPropNames*/)
+	LPGUID /*lpPropSetGuid*/,
+	ULONG /*ulFlags*/,
+	ULONG FAR* /*lpcPropNames*/,
+	LPMAPINAMEID FAR* FAR* /*lpppPropNames*/)
 {
 	Log(true, _T("CXPStatus::GetNamesFromIDs function called\n"));
 
@@ -444,9 +444,9 @@ STDMETHODIMP CXPStatus::GetNamesFromIDs(LPSPropTagArray FAR* /*lppPropTags*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::GetIDsFromNames(ULONG /*cPropNames*/,
-										LPMAPINAMEID FAR* /*lppPropNames*/,
-										ULONG /*ulFlags*/,
-										LPSPropTagArray FAR* /*lppPropTags*/)
+	LPMAPINAMEID FAR* /*lppPropNames*/,
+	ULONG /*ulFlags*/,
+	LPSPropTagArray FAR* /*lppPropTags*/)
 {
 	Log(true, _T("CXPStatus::GetIDsFromNames function called\n"));
 
@@ -465,7 +465,7 @@ STDMETHODIMP CXPStatus::GetIDsFromNames(ULONG /*cPropNames*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::ValidateState(ULONG_PTR /*ulUIParam*/,
-									  ULONG /*ulFlags*/)
+	ULONG /*ulFlags*/)
 {
 	Log(true, _T("CXPStatus::ValidateState function called\n"));
 
@@ -500,7 +500,7 @@ STDMETHODIMP CXPStatus::ValidateState(ULONG_PTR /*ulUIParam*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::SettingsDialog(ULONG_PTR /*ulUIParam*/,
-									   ULONG /*ulFlags*/)
+	ULONG /*ulFlags*/)
 {
 	Log(true, _T("CXPStatus::SettingsDialog function called\n"));
 
@@ -517,8 +517,8 @@ STDMETHODIMP CXPStatus::SettingsDialog(ULONG_PTR /*ulUIParam*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::ChangePassword(LPTSTR /*lpOldPass*/,
-									   LPTSTR /*lpNewPass*/,
-									   ULONG /*ulFlags*/)
+	LPTSTR /*lpNewPass*/,
+	ULONG /*ulFlags*/)
 {
 	Log(true, _T("CXPStatus::ChangePassword function called\n"));
 
@@ -533,9 +533,9 @@ STDMETHODIMP CXPStatus::ChangePassword(LPTSTR /*lpOldPass*/,
 ***********************************************************************************************/
 
 STDMETHODIMP CXPStatus::FlushQueues(ULONG_PTR /*ulUIParam*/,
-									ULONG /*cbTargetTransport*/,
-									LPENTRYID /*lpTargetTransport*/,
-									ULONG ulFlags)
+	ULONG /*cbTargetTransport*/,
+	LPENTRYID /*lpTargetTransport*/,
+	ULONG ulFlags)
 {
 	Log(true, _T("CXPStatus::FlushQueues function called\n"));
 
@@ -559,9 +559,9 @@ STDMETHODIMP CXPStatus::FlushQueues(ULONG_PTR /*ulUIParam*/,
 ***********************************************************************************************/
 
 SCODE STDMETHODCALLTYPE CXPStatus::MyAllocateBuffer(ULONG			cbSize,
-												    LPVOID FAR *	lppBuffer)
+	LPVOID FAR *	lppBuffer)
 {
-	if (m_pAllocBuffer) return m_pAllocBuffer(cbSize,lppBuffer);
+	if (m_pAllocBuffer) return m_pAllocBuffer(cbSize, lppBuffer);
 
 	Log(true, _T("CXPStatus::MyAllocateBuffer: m_pAllocBuffer not set!\n"));
 	return MAPI_E_INVALID_PARAMETER;
@@ -576,10 +576,10 @@ SCODE STDMETHODCALLTYPE CXPStatus::MyAllocateBuffer(ULONG			cbSize,
 ***********************************************************************************************/
 
 SCODE STDMETHODCALLTYPE CXPStatus::MyAllocateMore(ULONG			cbSize,
-												  LPVOID		lpObject,
-												  LPVOID FAR *	lppBuffer)
+	LPVOID		lpObject,
+	LPVOID FAR *	lppBuffer)
 {
-	if (m_pAllocMore) return m_pAllocMore(cbSize,lpObject,lppBuffer);
+	if (m_pAllocMore) return m_pAllocMore(cbSize, lpObject, lppBuffer);
 
 	Log(true, _T("CXPStatus::MyAllocMore: m_pAllocMore not set!\n"));
 	return MAPI_E_INVALID_PARAMETER;
@@ -598,7 +598,7 @@ ULONG STDAPICALLTYPE CXPStatus::MyFreeBuffer(LPVOID			lpBuffer)
 	if (m_pFreeBuffer) return m_pFreeBuffer(lpBuffer);
 
 	Log(true, _T("CXPStatus::MyFreeBuffer: m_pFreeBuffer not set!\n"));
-	return (ULONG) MAPI_E_INVALID_PARAMETER;
+	return (ULONG)MAPI_E_INVALID_PARAMETER;
 }
 
 /***********************************************************************************************
@@ -618,7 +618,7 @@ DWORD CXPStatus::CheckInboxAvailability(LPSTR lpszInboxPath)
 	DWORD dwErr = 0;
 	HANDLE hInbox = NULL;
 
-	hInbox = CreateFileA(lpszInboxPath, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
+	hInbox = CreateFileA(lpszInboxPath, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 		NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
 	if (INVALID_HANDLE_VALUE == hInbox)
 	{
@@ -640,7 +640,7 @@ DWORD CXPStatus::CheckInboxAvailability(LPSTR lpszInboxPath)
 ***********************************************************************************************/
 
 HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSource,
-		LPSPropValue pspvDestination, LPVOID pParent)
+	LPSPropValue pspvDestination, LPVOID pParent)
 {
 	if (!ulRequestedTag || !spvSource.Value.lpszA || !pspvDestination || !pParent)
 		return MAPI_E_INVALID_PARAMETER;
@@ -660,7 +660,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 				// NULL terminator
 				cbSourceLen += sizeof(char);
 
-				hRes = MyAllocateMore((ULONG) cbSourceLen, pParent, (LPVOID*)&(pspvDestination->Value.lpszA));
+				hRes = MyAllocateMore((ULONG)cbSourceLen, pParent, (LPVOID*)&(pspvDestination->Value.lpszA));
 				if (SUCCEEDED(hRes) && pspvDestination->Value.lpszA)
 				{
 					hRes = StringCbCopyA(pspvDestination->Value.lpszA, cbSourceLen, spvSource.Value.lpszA);
@@ -675,7 +675,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 				// NULL terminator
 				cbSourceLen += sizeof(WCHAR);
 
-				hRes = MyAllocateMore((ULONG) cbSourceLen, pParent, (LPVOID*)&(pspvDestination->Value.lpszW));
+				hRes = MyAllocateMore((ULONG)cbSourceLen, pParent, (LPVOID*)&(pspvDestination->Value.lpszW));
 				if (SUCCEEDED(hRes) && pspvDestination->Value.lpszW)
 				{
 					hRes = StringCbCopyW(pspvDestination->Value.lpszW, cbSourceLen, spvSource.Value.lpszW);
@@ -695,16 +695,16 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 			cchStringA++;
 
 			int cchWideChars = 0;
-			cchWideChars = MultiByteToWideChar(CP_ACP, 0, spvSource.Value.lpszA, (int) cchStringA,
-							NULL, 0);
+			cchWideChars = MultiByteToWideChar(CP_ACP, 0, spvSource.Value.lpszA, (int)cchStringA,
+				NULL, 0);
 			if (cchWideChars > 0)
 			{
-				hRes = MyAllocateMore(cchWideChars*sizeof(WCHAR), pParent,
+				hRes = MyAllocateMore(cchWideChars * sizeof(WCHAR), pParent,
 					(LPVOID*)&(pspvDestination->Value.lpszW));
 				if (SUCCEEDED(hRes) && pspvDestination->Value.lpszW)
 				{
 					int iRet = 0;
-					iRet = MultiByteToWideChar(CP_ACP, 0, spvSource.Value.lpszA, (int) cchStringA,
+					iRet = MultiByteToWideChar(CP_ACP, 0, spvSource.Value.lpszA, (int)cchStringA,
 						pspvDestination->Value.lpszW, cchWideChars);
 					if (iRet <= 0)
 					{
@@ -732,7 +732,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 			int cchMBChars = 0;
 
 			cchMBChars = WideCharToMultiByte(CP_ACP, 0, spvSource.Value.lpszW,
-					(int) cchStringW, NULL, 0, NULL, NULL);
+				(int)cchStringW, NULL, 0, NULL, NULL);
 
 			if (cchMBChars > 0)
 			{
@@ -743,7 +743,7 @@ HRESULT CXPStatus::GetConvertedStringProp(ULONG ulRequestedTag, SPropValue spvSo
 					int iRet = 0;
 
 					iRet = WideCharToMultiByte(CP_ACP, 0, spvSource.Value.lpszW,
-						(int) cchStringW, pspvDestination->Value.lpszA, cchMBChars, NULL, NULL);
+						(int)cchStringW, pspvDestination->Value.lpszA, cchMBChars, NULL, NULL);
 					if (iRet <= 0)
 					{
 						hRes = HRESULT_FROM_WIN32(::GetLastError());
